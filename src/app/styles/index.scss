@@ -1,16 +1,13 @@
 @import "reset";
 @import "variables/global";
-@import "themes/light";
-@import "themes/dark";
 
 body {
   font-family: var(--font-family-main);
   font-size: var(--font-m);
-  color: var(--inverted-primary-color);
 }
 
 .app {
-  background: var(--bg-color);
+  background: #ffffff;
   min-height: 100vh;
   -webkit-box-flex: 1;
   flex-grow: 1;

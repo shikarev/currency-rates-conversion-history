@@ -2,7 +2,7 @@ import React from 'react'
 
 const MainPage = () => (
   <div>
-    Главная
+    SPA на React(TypeScript)+Redux
   </div>
 )
 

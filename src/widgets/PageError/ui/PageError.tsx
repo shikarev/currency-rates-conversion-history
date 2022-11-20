@@ -1,6 +1,5 @@
+import { Button } from '@mui/material'
 import { classNames } from 'shared/lib/classNames/classNames'
-
-import { Button, ButtonTheme } from 'shared/ui/Button/Button'
 import cls from './PageError.module.scss'
 
 interface PageErrorProps {
@@ -16,7 +15,11 @@ const PageError = ({ className }: PageErrorProps) => {
   return (
     <div className={classNames(cls.PageError, {}, [className])}>
       <p>Произошла непредвиденная ошибка</p>
-      <Button theme={ButtonTheme.OUTLINE} onClick={reloadPage}>
+      <Button
+        variant="outlined"
+        color="primary"
+        onClick={reloadPage}
+      >
         Обновить страницу
       </Button>
     </div>

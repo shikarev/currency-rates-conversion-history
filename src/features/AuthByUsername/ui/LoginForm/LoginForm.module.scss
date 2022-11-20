@@ -1,7 +1,10 @@
 .LoginForm {
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 100%;
+  max-width: 250px;
+  height: 100%;
+  justify-content: center;
 }
 
 .inputWrapper {
@@ -10,17 +13,10 @@
   margin-bottom: 10px;
 }
 
-.input {
-  margin-top: 10px;
-}
-
-.loginBtn {
-  margin-top: 15px;
-  margin-left: auto;
-}
-
 .ErrorWrapper {
   display: flex;
   align-items: center;
-  height: 32px;
+  justify-content: center;
+  height: 52px;
+  margin-top: 5px;
 }

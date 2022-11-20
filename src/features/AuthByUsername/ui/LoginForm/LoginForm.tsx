@@ -1,11 +1,11 @@
 import { classNames } from 'shared/lib/classNames/classNames'
-
-import { Button, ButtonTheme } from 'shared/ui/Button/Button'
-import { Input } from 'shared/ui/Input/Input'
 import { useDispatch, useSelector } from 'react-redux'
-import { memo, useCallback } from 'react'
-import { Text, TextTheme } from 'shared/ui/Text/Text'
+import { ChangeEvent, memo, useCallback } from 'react'
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
+import {
+  Button, FormControl, FormHelperText, OutlinedInput, Typography,
+} from '@mui/material'
+import Arrow from 'shared/assets/icons/arrow.svg'
 import { getLoginUsername } from '../../model/selectors/getLoginUsername/getLoginUsername'
 import { getLoginPassword } from '../../model/selectors/getLoginPassword/getLoginPassword'
 import { getLoginIsLoading } from '../../model/selectors/getLoginIsLoading/getLoginIsLoading'
@@ -31,12 +31,12 @@ const LoginForm = memo((props: LoginFormProps) => {
   const isLoading = useSelector(getLoginIsLoading)
   const error = useSelector(getLoginError)
 
-  const onChangeUsername = useCallback((value: string) => {
-    dispatch(loginActions.setUsername(value))
+  const onChangeUsername = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(loginActions.setUsername(e.target.value))
   }, [dispatch])
 
-  const onChangePassword = useCallback((value: string) => {
-    dispatch(loginActions.setPassword(value))
+  const onChangePassword = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(loginActions.setPassword(e.target.value))
   }, [dispatch])
 
   const onLoginClick = useCallback(() => {
@@ -49,38 +49,69 @@ const LoginForm = memo((props: LoginFormProps) => {
       reducers={initialReducers}
     >
       <div className={classNames(cls.LoginForm, {}, [className])}>
-        <Text title="Форма авторизации" />
-
         <div className={cls.inputWrapper}>
-          <Input
-            type="text"
-            className={classNames(cls.input)}
-            placeholder="Введите login"
-            onChange={onChangeUsername}
-            value={login}
-          />
+          <FormControl sx={{ mb: '15px' }} variant="outlined">
+            <FormHelperText sx={{ fontSize: '14px', color: '#000000', mb: '2px' }}>Логин</FormHelperText>
+            <OutlinedInput
+              value={login}
+              onChange={onChangeUsername}
+              placeholder="user@mail.ru"
+              type="email"
+              error={!!error}
+              sx={{
+                borderRadius: '5px',
+                fontSize: '16px',
+                '& .MuiOutlinedInput-input': {
+                  p: '10px',
+                },
+              }}
+            />
+          </FormControl>
 
-          <Input
-            type="text"
-            className={classNames(cls.input)}
-            placeholder="Введите пароль"
-            onChange={onChangePassword}
-            value={password}
-          />
-        </div>
-
-        <div className={cls.ErrorWrapper}>
-          {error && <Text text={error} theme={TextTheme.ERROR} />}
+          <FormControl variant="outlined">
+            <FormHelperText sx={{ fontSize: '14px', color: '#000000', mb: '2px' }}>Пароль</FormHelperText>
+            <OutlinedInput
+              value={password}
+              onChange={onChangePassword}
+              error={!!error}
+              placeholder="*********"
+              type="password"
+              sx={{
+                borderRadius: '5px',
+                fontSize: '16px',
+                '& .MuiOutlinedInput-input': {
+                  p: '10px',
+                },
+              }}
+            />
+          </FormControl>
         </div>
 
         <Button
-          theme={ButtonTheme.OUTLINE}
-          className={classNames(cls.loginBtn)}
+          color="primary"
+          variant="contained"
+          sx={{ mt: '50px', '& span': { ml: '6px' } }}
           disabled={isLoading}
           onClick={onLoginClick}
         >
-          Войти
+          Вход
+          {' '}
+          <span><Arrow /></span>
         </Button>
+
+        <div className={cls.ErrorWrapper}>
+          {error
+              && (
+                <Typography
+                  sx={{
+                    fontSize: '10px',
+                    color: '#D32F2F',
+                  }}
+                >
+                  {error}
+                </Typography>
+              )}
+        </div>
       </div>
     </DynamicModuleLoader>
   )

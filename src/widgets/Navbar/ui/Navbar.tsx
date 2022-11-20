@@ -1,10 +1,10 @@
 import { LoginModal } from 'features/AuthByUsername'
 import React, { useCallback, useState } from 'react'
-
 import { classNames } from 'shared/lib/classNames/classNames'
-import { Button, ButtonTheme } from 'shared/ui/Button/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserAuthData, userActions } from 'entities/User'
+import { Button } from '@mui/material'
+import Arrow from 'shared/assets/icons/arrow.svg'
 import cls from './Navbar.module.scss'
 
 interface NavbarProps {
@@ -33,11 +33,13 @@ const Navbar = ({ className }: NavbarProps) => {
     return (
       <div className={classNames(cls.Navbar, {}, [className])}>
         <Button
-          theme={ButtonTheme.CLEAR_INVERTED}
-          className={cls.links}
+          color="primary"
+          variant="outlined"
+          sx={{ width: '130px' }}
+          disableRipple
           onClick={onLogout}
         >
-          Выйти
+          Выход
         </Button>
       </div>
     )
@@ -46,11 +48,15 @@ const Navbar = ({ className }: NavbarProps) => {
   return (
     <div className={classNames(cls.Navbar, {}, [className])}>
       <Button
-        theme={ButtonTheme.CLEAR_INVERTED}
-        className={cls.links}
+        color="primary"
+        variant="contained"
+        sx={{ width: '130px', '& span': { ml: '6px' } }}
+        disableRipple
         onClick={onShowModal}
       >
         Войти
+        {' '}
+        <span><Arrow /></span>
       </Button>
       {isAuthModal
         ? <LoginModal isOpen={isAuthModal} onClose={onCloseModal} />

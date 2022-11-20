@@ -1,5 +1,5 @@
+import { Button } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { Button } from 'shared/ui/Button/Button'
 
 // компонент для тестирования
 const BugButton = () => {
@@ -15,6 +15,8 @@ const BugButton = () => {
 
   return (
     <Button
+      variant="outlined"
+      color="primary"
       onClick={onThrow}
     >
       пробрость ошибку

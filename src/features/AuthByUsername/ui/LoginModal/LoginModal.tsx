@@ -1,24 +1,53 @@
-import { classNames } from 'shared/lib/classNames/classNames'
-import { Modal } from 'shared/ui/Modal/Modal'
+import { Box, Modal, Typography } from '@mui/material'
+import { Suspense } from 'react'
+import { Loader } from 'shared/ui/Loader/Loader'
 import { LoginFormAsync } from '../LoginForm/LoginForm.async'
+import cls from './LoginModal.module.scss'
 
 interface LoginModalProps {
-  className?: string
   isOpen: boolean
   onClose: () => void
 }
 
 const LoginModal = (props: LoginModalProps) => {
-  const { className, isOpen, onClose } = props
+  const { isOpen, onClose } = props
 
   return (
-    <Modal
-      className={classNames('', {}, [className])}
-      isOpen={isOpen}
-      onClose={onClose}
-      lazy
-    >
-      <LoginFormAsync />
+    <Modal open={isOpen} onClose={onClose}>
+      <Box
+        className={cls.LoginModal}
+      >
+        <Box
+          sx={{
+            borderTopLeftRadius: '20px',
+            borderTopRightRadius: '20px',
+            background: '#1A237E',
+            height: '60px',
+            color: '#FFFFFF',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '10px',
+          }}
+        >
+          <Typography variant="h5" noWrap>
+            Вход в личный кабинет
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >
+          <Suspense fallback={<Loader />}>
+            <LoginFormAsync />
+          </Suspense>
+        </Box>
+      </Box>
     </Modal>
   )
 }
