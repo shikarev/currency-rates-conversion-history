@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkcurrency_rates_conversion_history=self.webpackChunkcurrency_rates_conversion_history||[]).push([[196],{4196:(e,r,c)=>{c.r(r),c.d(r,{default:()=>s});var n=c(5893);const s=function(){return(0,n.jsx)("div",{children:"SPA на React(TypeScript)+Redux"})}}}]);
