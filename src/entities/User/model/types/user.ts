@@ -5,7 +5,7 @@ export enum ResultStatus {
 
 export interface Response {
   result: ResultStatus
-  error?: string
+  error?: string | undefined
 }
 
 export interface UserSchema {

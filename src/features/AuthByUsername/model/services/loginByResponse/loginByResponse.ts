@@ -23,7 +23,7 @@ export const loginByResponse = createAsyncThunk<Response, loginByResponseProps, 
       }
 
       if (response.data.result === ResultStatus.ERROR) {
-        return thunkAPI.rejectWithValue(response.data.error)
+        return thunkAPI.rejectWithValue(response.data.error || '')
       }
 
       if (response.data.result === ResultStatus.OK) {

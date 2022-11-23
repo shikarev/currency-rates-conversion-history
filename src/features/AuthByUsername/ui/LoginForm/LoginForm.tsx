@@ -104,12 +104,12 @@ const LoginForm = memo((props: LoginFormProps) => {
           <span><Arrow /></span>
         </Button>
 
-        <div className={cls.ErrorWrapper}>
+        <div className={cls.errorWrapper}>
           {error
               && (
                 <Typography
                   sx={{
-                    fontSize: '10px',
+                    fontSize: '12px',
                     color: '#D32F2F',
                   }}
                 >
