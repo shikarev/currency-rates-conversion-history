@@ -45,7 +45,7 @@ describe('loginByResponse.test', () => {
     mockedAxios.post.mockReturnValue(Promise.resolve({ data: userValue }))
 
     const thunk = new TestAsyncThunk(loginByResponse)
-    const result = await thunk.callThunk({ action: 'login', login: '123', password: '123' })
+    const result = await thunk.callThunk({ login: '123', password: '123' })
 
     expect(thunk.dispatch).toHaveBeenCalledWith(userActions.setAuthData(userValue))
     expect(thunk.dispatch).toHaveBeenCalledTimes(3)
@@ -57,7 +57,7 @@ describe('loginByResponse.test', () => {
   test('error login', async () => {
     mockedAxios.post.mockReturnValue(Promise.resolve({ status: 403 }))
     const thunk = new TestAsyncThunk(loginByResponse)
-    const result = await thunk.callThunk({ action: 'login', login: '123', password: '123' })
+    const result = await thunk.callThunk({ login: '123', password: '123' })
 
     expect(thunk.dispatch).toHaveBeenCalledTimes(2)
     expect(mockedAxios.post).toHaveBeenCalled()

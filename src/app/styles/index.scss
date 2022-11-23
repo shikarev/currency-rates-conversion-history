@@ -16,10 +16,6 @@ body {
 }
 
 .content-page {
-  display: flex;
-}
-
-.page-wrapper {
-  flex-grow: 1;
-  padding: 20px;
+  min-height: calc(100vh - 120px);
+  padding: 40px;
 }

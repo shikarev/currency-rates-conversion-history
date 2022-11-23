@@ -4,12 +4,14 @@ import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import {
   AnyAction, CombinedState, Reducer, ReducersMapObject,
 } from '@reduxjs/toolkit'
+import { ExchangeRateSchema } from 'entities/ExchangeRate'
 
 export interface StateSchema {
   user: UserSchema
 
   // Async Reducers
   loginForm?: LoginSchema
+  exchangeRate?: ExchangeRateSchema
 }
 
 export type StateSchemaKey = keyof StateSchema

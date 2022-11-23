@@ -41,6 +41,7 @@ const LoginModal = (props: LoginModalProps) => {
             justifyContent: 'center',
             alignItems: 'center',
             height: '100%',
+            padding: '1.6rem',
           }}
         >
           <Suspense fallback={<Loader />}>

@@ -5,16 +5,19 @@ import { ResultStatus } from 'entities/User/model/types/user'
 import { USER_LOCALSTORAGE_KEY } from 'shared/const/localStorage'
 
 interface loginByResponseProps {
-  action: string,
   login: string,
   password: string
 }
 
 export const loginByResponse = createAsyncThunk<Response, loginByResponseProps, { rejectValue: string}>(
   'login/loginByResponse',
-  async (authData, thunkAPI) => {
+  async ({ login, password }, thunkAPI) => {
     try {
-      const response = await axios.post<Response>('https://test-front-spa.mmtestprojectsfactory.com/api/', authData)
+      const response = await axios.post<Response>('https://test-front-spa.mmtestprojectsfactory.com/api/', {
+        action: 'login',
+        login,
+        password,
+      })
 
       console.log(response)
 
