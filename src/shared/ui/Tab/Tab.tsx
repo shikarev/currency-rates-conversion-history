@@ -5,13 +5,21 @@ interface StyledTabProps {
     value: number;
 }
 
-const Tab = styled((props: StyledTabProps) => <MuiTab disableRipple {...props} />)(
+const Tab = styled((props: StyledTabProps) => (
+  <MuiTab
+    sx={{
+      width: { xs: '30px', sm: '120px', md: '180px' },
+    }}
+    disableRipple
+    {...props}
+  />
+))(
   ({ theme }) => ({
     textTransform: 'none',
     fontSize: '14px',
     fontWeight: 400,
+    height: '40px',
     border: `1px solid ${theme.palette.primary.main}`,
-    minWidth: '180px',
     backgroundColor: theme.palette.background.default,
     '&:nth-of-type(even)': {
       '&:not(:last-child)': {

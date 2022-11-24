@@ -1,8 +1,8 @@
-import {
-  Box, Tabs as MuiTabs, Typography,
-} from '@mui/material'
+import { Box, Tabs as MuiTabs } from '@mui/material'
 import { ReactNode, SyntheticEvent, useState } from 'react'
 import { ExchangeRateCard } from 'entities/ExchangeRate'
+import { ConverterCard } from 'entities/Converter/ui/ConverterCard/ConverterCard'
+import { HistoryQuotesCard } from 'entities/HistoryQuotes/ui/HistoryQuotesCard/HistoryQuotesCard'
 import { Tab } from '../Tab/Tab'
 
 interface TabsProps {
@@ -49,6 +49,7 @@ const Tabs = (props: TabsProps) => {
         value={value}
         onChange={handleChange}
         sx={{
+          minWidth: '300px',
           '& .MuiTabs-indicator': {
             display: 'none',
           },
@@ -63,10 +64,10 @@ const Tabs = (props: TabsProps) => {
         <ExchangeRateCard />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <ConverterCard />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <HistoryQuotesCard />
       </TabPanel>
     </Box>
   )

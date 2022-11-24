@@ -79,7 +79,7 @@ const ExchangeRateCard = memo((props: ExchangeRateCardProps) => {
   return (
     <DynamicModuleLoader reducers={reducers}>
       <Box className={classNames(cls.ExchangeRateCard, {}, [className])}>
-        <TableDataGrid data={data || []} columns={columns} />
+        <TableDataGrid data={data || []} columns={columns} hideFooterPagination />
       </Box>
     </DynamicModuleLoader>
   )

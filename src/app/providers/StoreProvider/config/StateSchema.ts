@@ -12,6 +12,7 @@ export interface StateSchema {
   // Async Reducers
   loginForm?: LoginSchema
   exchangeRate?: ExchangeRateSchema
+  historyQuotes?: any
 }
 
 export type StateSchemaKey = keyof StateSchema
