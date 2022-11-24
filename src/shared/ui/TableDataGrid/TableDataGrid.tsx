@@ -22,13 +22,13 @@ const TableDataGrid = ({ data, columns }: TableDataGridProps) => {
       rowsPerPageOptions={[5, 10, 20]}
       onPageSizeChange={(newPageSize: number) => setPageSize(newPageSize)}
       disableSelectionOnClick
-      autoHeight
       disableColumnMenu
       disableDensitySelector
       disableColumnSelector
       hideFooterPagination
       localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
       sx={{
+        height: '460px',
         borderTopLeftRadius: 0,
         borderTopRightRadius: '20px',
         borderBottomLeftRadius: '20px',
