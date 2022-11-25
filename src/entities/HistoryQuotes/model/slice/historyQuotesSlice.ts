@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import cuid from 'cuid'
 import { fetchHistoryQuotes } from 'entities/HistoryQuotes/model/services/fetchHistoryQuotes/fetchHistoryQuotes'
-import { HistoryQuotes, HistoryTable } from '../types/History'
+import { HistoryQuotes } from '../types/History'
 
 const initialState: any = {
   data: undefined,
