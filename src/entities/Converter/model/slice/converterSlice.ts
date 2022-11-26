@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Table } from 'entities/ExchangeRate/model/types/exchangeRate'
 import { converterSchema } from '../types/converter'
 
 const initialState: converterSchema = {
@@ -27,12 +28,35 @@ export const converterSlice = createSlice({
       state.second = action.payload
     },
 
-    setFirstItems: (state, action: PayloadAction<any>) => {
-      state.firstItems = action.payload
+    setFirstItems: (state, action: PayloadAction<Table[]>) => {
+      const firstPair = action.payload.map((item) => (
+        item.asset.split('/')[0]
+      ))
+      const filteredItem = firstPair.filter((element, index) => firstPair.indexOf(element) === index)
+      state.firstItems = filteredItem
+
+      const firstInArray = filteredItem[0]
+      state.first = firstInArray
+
+      const secondFilter = action.payload.map((item) => (
+        item.asset
+      )).filter((item) => item.includes(`${firstInArray}/`))
+
+      const secondPair = secondFilter.map((item) => (
+        item.split('/')[1]
+      ))
+
+      const secondChoose = secondFilter[0].split('/')[1]
+
+      state.second = secondChoose
+      state.secondItems = secondPair
     },
 
-    setSecondItems: (state, action: PayloadAction<any>) => {
-      state.secondItems = action.payload
+    setSecondItems: (state, action: PayloadAction<string[]>) => {
+      const secondPair = action.payload.map((item) => (
+        item.split('/')[1]
+      ))
+      state.secondItems = secondPair
     },
 
     setTotal: (state, action: PayloadAction<string>) => {

@@ -1,9 +1,9 @@
 export interface converterSchema {
     amount: string,
     first: string,
-    firstItems: [],
     second: string,
-    secondItems: [],
+    firstItems: string[],
+    secondItems: string[],
     isLoading: boolean,
     total: string
 }

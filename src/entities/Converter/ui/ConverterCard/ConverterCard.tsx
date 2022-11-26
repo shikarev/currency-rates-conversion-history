@@ -1,5 +1,5 @@
 import {
-  Box, Button, FormControl, FormHelperText, MenuItem, OutlinedInput, Select, Typography,
+  Box, Button, FormControl, FormHelperText, MenuItem, OutlinedInput, Select, SelectChangeEvent, Typography,
 } from '@mui/material'
 import { classNames } from 'shared/lib/classNames/classNames'
 import { useSelector } from 'react-redux'
@@ -13,6 +13,7 @@ import { converterActions } from 'entities/Converter'
 import { getTotal } from 'entities/Converter/model/selectors/getTotal/getTotal'
 import SelectArrow from 'shared/assets/icons/select-arrow-down.svg'
 import { getSecondItems } from 'entities/Converter/model/selectors/getSecondItems/getSecondItems'
+import { getFirstItems } from 'entities/Converter/model/selectors/getFirstItems/getFirstItems'
 import cls from './ConverterCard.module.scss'
 
 interface ConverterCardProps {
@@ -30,7 +31,9 @@ const ConverterCard = (props: ConverterCardProps) => {
 
   const firstPair = useSelector(getFirst)
   const secondPair = useSelector(getSecond)
-  const secondItems = useSelector(getSecondItems)
+
+  const selectorOne = useSelector(getFirstItems)
+  const selectorTwo = useSelector(getSecondItems)
 
   const handleTotal = () => {
     const result = `${firstPair}/${secondPair}`
@@ -44,49 +47,25 @@ const ConverterCard = (props: ConverterCardProps) => {
     dispatch(converterActions.setCurrency(e.target.value))
   }, [dispatch])
 
-  const onChangeFirstPair = useCallback((e: any) => {
-    const newItem = update?.map((item) => (
-      item.asset
-    )).filter((item) => item.includes(`${e.target.value}/`))
+  const onChangeFirstPair = useCallback((e: SelectChangeEvent) => {
+    if (update) {
+      const newItem = update.map((item) => (
+        item.asset
+      )).filter((item) => item.includes(`${e.target.value}/`))
 
-    if (newItem) {
       dispatch(converterActions.setSecondItems(newItem))
       dispatch(converterActions.setSecond(newItem[0].split('/')[1]))
+      dispatch(converterActions.setFirst(e.target.value))
     }
-    dispatch(converterActions.setFirst(e.target.value))
   }, [dispatch, update])
 
-  const onChangeSecondPair = useCallback((e: any) => {
+  const onChangeSecondPair = useCallback((e: SelectChangeEvent) => {
     dispatch(converterActions.setSecond(e.target.value))
   }, [dispatch])
 
-  const firstSelector = () => {
-    const newItem = update?.map((item) => (
-      item.asset.split('/')[0]
-    ))
-    const filteredItem = newItem?.filter((element, index) => newItem.indexOf(element) === index)
-
-    return filteredItem?.map((item) => <MenuItem key={item} value={item}>{item}</MenuItem>)
-  }
-
-  const secondSelector = () => {
-    const secondItems1 = secondItems?.map((item: any) => (
-      item.split('/')[1]
-    ))
-
-    const filteredItem = secondItems1?.filter((element, index) => secondItems1.indexOf(element) === index)
-
-    return filteredItem?.map((item) => <MenuItem key={item} value={item}>{item}</MenuItem>)
-  }
-
   useEffect(() => {
-    const newItem = update?.map((item) => (
-      item.asset
-    )).filter((item) => item.includes('USD/'))
-
-    if (newItem) {
-      dispatch(converterActions.setSecondItems(newItem))
-      dispatch(converterActions.setSecond(newItem[0].split('/')[1]))
+    if (update) {
+      dispatch(converterActions.setFirstItems(update))
     }
   }, [dispatch, update])
 
@@ -158,7 +137,9 @@ const ConverterCard = (props: ConverterCardProps) => {
                   },
                 }}
               >
-                {firstSelector()}
+                {selectorOne.map((item) => (
+                  <MenuItem key={item} value={item}>{item}</MenuItem>
+                ))}
               </Select>
             </FormControl>
 
@@ -167,6 +148,7 @@ const ConverterCard = (props: ConverterCardProps) => {
                 value={secondPair}
                 onChange={onChangeSecondPair}
                 IconComponent={SelectArrow}
+                displayEmpty
                 sx={{
                   borderRadius: '5px',
                   fontSize: '16px',
@@ -180,7 +162,9 @@ const ConverterCard = (props: ConverterCardProps) => {
                   },
                 }}
               >
-                {secondSelector()}
+                {selectorTwo.map((item) => (
+                  <MenuItem key={item} value={item}>{item}</MenuItem>
+                ))}
               </Select>
             </FormControl>
             <Button
