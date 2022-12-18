@@ -13,6 +13,7 @@ import { getLoginUsername } from '../../model/selectors/getLoginUsername/getLogi
 import { getLoginPassword } from '../../model/selectors/getLoginPassword/getLoginPassword'
 import { getLoginIsLoading } from '../../model/selectors/getLoginIsLoading/getLoginIsLoading'
 import { getLoginError } from '../../model/selectors/getLoginError/getLoginError'
+import { getLoginValidation } from '../../model/selectors/getLoginValidation/getLoginValidation'
 import { loginByResponse } from '../../model/services/loginByResponse/loginByResponse'
 import { loginActions, loginReducer } from '../../model/slice/loginSlice'
 import cls from './LoginForm.module.scss'
@@ -33,6 +34,7 @@ const LoginForm = memo((props: LoginFormProps) => {
   const login = useSelector(getLoginUsername)
   const password = useSelector(getLoginPassword)
   const isLoading = useSelector(getLoginIsLoading)
+  const isValidate = useSelector(getLoginValidation)
   const error = useSelector(getLoginError)
 
   const onChangeUsername = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -113,7 +115,7 @@ const LoginForm = memo((props: LoginFormProps) => {
           color="primary"
           variant="contained"
           sx={{ mt: '50px', '& span': { ml: '6px' } }}
-          disabled={isLoading}
+          disabled={isLoading || !isValidate}
           onClick={onLoginClick}
           type="submit"
         >

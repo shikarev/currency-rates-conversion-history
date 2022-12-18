@@ -9,6 +9,7 @@ const initialState: LoginSchema = {
   login: '',
   password: '',
   isLoading: false,
+  validation: false,
 }
 
 export const loginSlice = createSlice({
@@ -18,7 +19,7 @@ export const loginSlice = createSlice({
     setUsername: (state, action: PayloadAction<string>) => {
       state.login = action.payload
       state.error = undefined
-      if (state.login.length >= 5 && !state.login.match(emailRegex)) {
+      if (!state.login.match(emailRegex)) {
         state.error = 'Некорректный формат адреса электронной почты'
       }
     },
@@ -26,9 +27,12 @@ export const loginSlice = createSlice({
     setPassword: (state, action: PayloadAction<string>) => {
       state.password = action.payload
       state.error = undefined
-      if (state.password.length >= 7 && !state.password.match(passwordRegex)) {
+      if (!state.password.match(passwordRegex)) {
         // eslint-disable-next-line max-len
         state.error = 'Не менее 7 символов, содержащих латинские буквы верхнего и нижнего регистра и цифры, без спец. символов, кроме "_"'
+        state.validation = false
+      } else {
+        state.validation = true
       }
     },
   },
@@ -37,6 +41,7 @@ export const loginSlice = createSlice({
       .addCase(loginByResponse.pending, (state) => {
         state.error = undefined
         state.isLoading = true
+        state.validation = false
       })
       .addCase(loginByResponse.fulfilled, (state) => {
         state.isLoading = false
