@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getUserAuthData, userActions } from 'entities/User'
 import { Button } from '@mui/material'
 import Arrow from 'shared/assets/icons/arrow.svg'
+import { useNavigate } from 'react-router-dom'
 import cls from './Navbar.module.scss'
 
 interface NavbarProps {
@@ -14,6 +15,7 @@ interface NavbarProps {
 const Navbar = ({ className }: NavbarProps) => {
   const [isAuthModal, setIsAuthModal] = useState(false)
   const authData = useSelector(getUserAuthData)
+  const navigate = useNavigate()
 
   const dispatch = useDispatch()
 
@@ -27,40 +29,24 @@ const Navbar = ({ className }: NavbarProps) => {
 
   const onLogout = useCallback(() => {
     dispatch(userActions.logout())
-  }, [dispatch])
+    navigate('login')
+  }, [dispatch, navigate])
 
-  if (authData) {
-    return (
-      <div className={classNames(cls.Navbar, {}, [className])}>
-        <Button
-          color="primary"
-          variant="outlined"
-          sx={{ width: '130px' }}
-          disableRipple
-          onClick={onLogout}
-        >
-          Выход
-        </Button>
-      </div>
-    )
+  if (!authData) {
+    return null
   }
 
   return (
     <div className={classNames(cls.Navbar, {}, [className])}>
       <Button
         color="primary"
-        variant="contained"
-        sx={{ width: '130px', '& span': { ml: '6px' } }}
+        variant="outlined"
+        sx={{ width: '130px' }}
         disableRipple
-        onClick={onShowModal}
+        onClick={onLogout}
       >
-        Войти
-        {' '}
-        <span><Arrow /></span>
+        Выход
       </Button>
-      {isAuthModal
-        ? <LoginModal isOpen={isAuthModal} onClose={onCloseModal} />
-        : null}
     </div>
   )
 }
