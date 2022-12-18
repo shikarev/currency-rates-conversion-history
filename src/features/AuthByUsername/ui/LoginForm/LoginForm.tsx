@@ -1,6 +1,8 @@
 import { classNames } from 'shared/lib/classNames/classNames'
 import { useSelector } from 'react-redux'
-import { ChangeEvent, memo, useCallback } from 'react'
+import {
+  ChangeEvent, memo, useCallback, useEffect,
+} from 'react'
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import {
   Button, FormControl, FormHelperText, OutlinedInput, Typography,
@@ -47,6 +49,21 @@ const LoginForm = memo((props: LoginFormProps) => {
       onSuccess()
     }
   }, [onSuccess, dispatch, login, password])
+
+  useEffect(() => {
+    const keyDownHandler = (event: { key: string; preventDefault: () => void }) => {
+      if (event.key === 'Enter') {
+        event.preventDefault()
+        onLoginClick()
+      }
+    }
+
+    document.addEventListener('keydown', keyDownHandler)
+
+    return () => {
+      document.removeEventListener('keydown', keyDownHandler)
+    }
+  }, [onLoginClick])
 
   return (
     <DynamicModuleLoader
@@ -98,6 +115,7 @@ const LoginForm = memo((props: LoginFormProps) => {
           sx={{ mt: '50px', '& span': { ml: '6px' } }}
           disabled={isLoading}
           onClick={onLoginClick}
+          type="submit"
         >
           Вход
           {' '}
