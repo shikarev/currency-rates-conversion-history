@@ -3,17 +3,19 @@ import { Box, Typography } from '@mui/material'
 import { Suspense } from 'react'
 import { Loader } from 'shared/ui/Loader/Loader'
 import { LoginFormAsync } from 'features/AuthByUsername/ui/LoginForm/LoginForm.async'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { getUserAuthData } from 'entities/User'
 import cls from './LoginPage.module.scss'
 
-interface LoginPageProps {
-  className?: string
-}
-
-const LoginPage = (props: LoginPageProps) => {
-  const { className } = props
+const LoginPage = () => {
+  const isAuth = useSelector(getUserAuthData)
 
   const navigate = useNavigate()
+
+  if (isAuth) {
+    return <Navigate to="/main" />
+  }
 
   return (
     <Box

@@ -2,6 +2,7 @@ import { Navigate, RouteProps } from 'react-router-dom'
 import { MainPage } from 'pages/MainPage'
 import { NotFoundPage } from 'pages/NotFoundPage'
 import { LoginPage } from 'pages/LoginPage'
+import DefaultPage from 'pages/DefaultPage'
 
 type AppRouteProps = RouteProps & {
   authOnly?: boolean
@@ -24,7 +25,7 @@ export const RouterPath: Record<AppRoutes, string> = {
 export const routeConfig: Record<AppRoutes, AppRouteProps> = {
   [AppRoutes.DEFAULT]: {
     path: RouterPath.default,
-    element: <Navigate to="login" />,
+    element: <DefaultPage />,
   },
   [AppRoutes.MAIN]: {
     path: RouterPath.main,
