@@ -9,12 +9,13 @@ import {
 } from '@mui/material'
 import Arrow from 'shared/assets/icons/arrow.svg'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
+import { useLoginByResponse } from 'features/AuthByUsername/api/authApi'
+import { ResultStatus, userActions } from 'entities/User'
+import { USER_LOCALSTORAGE_KEY } from 'shared/const/localStorage'
 import { getLoginUsername } from '../../model/selectors/getLoginUsername/getLoginUsername'
 import { getLoginPassword } from '../../model/selectors/getLoginPassword/getLoginPassword'
 import { getLoginIsLoading } from '../../model/selectors/getLoginIsLoading/getLoginIsLoading'
-import { getLoginError } from '../../model/selectors/getLoginError/getLoginError'
 import { getLoginValidation } from '../../model/selectors/getLoginValidation/getLoginValidation'
-import { loginByResponse } from '../../model/services/loginByResponse/loginByResponse'
 import { loginActions, loginReducer } from '../../model/slice/loginSlice'
 import cls from './LoginForm.module.scss'
 
@@ -29,13 +30,14 @@ const initialReducers: ReducersList = {
 
 const LoginForm = memo((props: LoginFormProps) => {
   const { className, onSuccess } = props
+  const [loginByResponse, { data, error }] = useLoginByResponse()
 
   const dispatch = useAppDispatch()
   const login = useSelector(getLoginUsername)
   const password = useSelector(getLoginPassword)
   const isLoading = useSelector(getLoginIsLoading)
   const isValidate = useSelector(getLoginValidation)
-  const error = useSelector(getLoginError)
+  // const error = useSelector(getLoginError)
 
   const onChangeUsername = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     dispatch(loginActions.setUsername(e.target.value))
@@ -45,12 +47,25 @@ const LoginForm = memo((props: LoginFormProps) => {
     dispatch(loginActions.setPassword(e.target.value))
   }, [dispatch])
 
-  const onLoginClick = useCallback(async () => {
-    const result = await dispatch(loginByResponse({ login, password }))
-    if (result.meta.requestStatus === 'fulfilled') {
-      onSuccess()
+  const onLoginClick = useCallback(() => {
+    loginByResponse({ login, password })
+  }, [loginByResponse, login, password])
+
+  useEffect(() => {
+    if (data) {
+      if (data.result === ResultStatus.OK) {
+        console.log(data.result)
+        localStorage.setItem(USER_LOCALSTORAGE_KEY, JSON.stringify(data))
+        dispatch(userActions.setAuthData(data))
+      }
     }
-  }, [onSuccess, dispatch, login, password])
+  }, [data, dispatch])
+
+  useEffect(() => {
+    if (error) {
+      //
+    }
+  }, [error])
 
   useEffect(() => {
     const keyDownHandler = (event: { key: string; preventDefault: () => void }) => {

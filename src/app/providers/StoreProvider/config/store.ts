@@ -3,8 +3,9 @@ import {
 } from '@reduxjs/toolkit'
 import { userReducer } from 'entities/User'
 import { converterReducer } from 'entities/Converter'
+import { $api, rtkApi } from 'shared/api/rtkApi'
 import { createReducerManager } from './reducerManager'
-import { StateSchema } from './StateSchema'
+import { StateSchema, ThunkExtraArg } from './StateSchema'
 
 export function createReduxStore(
   initialState?: StateSchema,
@@ -14,14 +15,24 @@ export function createReduxStore(
     ...asyncReducers,
     user: userReducer,
     converter: converterReducer,
+    [rtkApi.reducerPath]: rtkApi.reducer,
   }
 
   const reducerManager = createReducerManager(rootReducers)
 
-  const store = configureStore<StateSchema>({
+  const extraArg: ThunkExtraArg = {
+    api: $api,
+  }
+
+  const store = configureStore({
     reducer: reducerManager.reduce as Reducer<CombinedState<StateSchema>>,
     devTools: __IS_DEV__,
     preloadedState: initialState,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+      thunk: {
+        extraArgument: extraArg,
+      },
+    }).concat(rtkApi.middleware),
   })
 
   // @ts-ignore
