@@ -19,10 +19,8 @@ export const loginByResponse = createAsyncThunk<Response, loginByResponseProps, 
         password,
       })
 
-      console.log(response)
-
       if (!response.data) {
-        throw new Error()
+        throw new Error('')
       }
 
       if (response.data.result === ResultStatus.ERROR) {

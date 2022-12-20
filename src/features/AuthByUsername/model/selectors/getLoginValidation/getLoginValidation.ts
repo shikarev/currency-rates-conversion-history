@@ -1,3 +1,7 @@
-import { StateSchema } from 'app/providers/StoreProvider'
+import { createSelector } from '@reduxjs/toolkit'
+import { getLoginForm } from '../getLoginForm'
 
-export const getLoginValidation = (state: StateSchema) => state?.loginForm?.validation
+export const getLoginValidation = createSelector(
+  [getLoginForm],
+  (loginForm) => loginForm?.validation,
+)
