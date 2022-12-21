@@ -1,29 +1,23 @@
-import { Box, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { Suspense } from 'react'
 import { Loader } from 'shared/ui/Loader/Loader'
+import { ContentBoxStyled, TitleBoxStyled, WidgetBoxStyled } from './styled'
 import { LoginFormAsync } from '../LoginForm/LoginForm.async'
-import cls from './LoginWidget.module.scss'
 
 const LoginWidget = () => (
-  <Box
-    className={cls.LoginWidget}
-  >
-    <Box
-      className={cls.loginWidgetHeader}
-    >
+  <WidgetBoxStyled>
+    <TitleBoxStyled>
       <Typography variant="h5" noWrap>
         Вход в личный кабинет
       </Typography>
-    </Box>
+    </TitleBoxStyled>
 
-    <Box
-      className={cls.loginWidgetContent}
-    >
+    <ContentBoxStyled>
       <Suspense fallback={<Loader />}>
         <LoginFormAsync />
       </Suspense>
-    </Box>
-  </Box>
+    </ContentBoxStyled>
+  </WidgetBoxStyled>
 )
 
 export { LoginWidget }
