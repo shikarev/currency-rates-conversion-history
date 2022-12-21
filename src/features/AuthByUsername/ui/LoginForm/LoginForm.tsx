@@ -1,7 +1,5 @@
 import { useSelector } from 'react-redux'
-import {
-  FormEvent, memo, useCallback, useEffect,
-} from 'react'
+import { FormEvent, memo, useCallback } from 'react'
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import {
   Button, FormHelperText, OutlinedInputProps, Typography,
@@ -20,9 +18,9 @@ import {
 } from './styled'
 import { getLoginUsername } from '../../model/selectors/getLoginUsername/getLoginUsername'
 import { getLoginPassword } from '../../model/selectors/getLoginPassword/getLoginPassword'
-import { getLoginValidation } from '../../model/selectors/getLoginValidation/getLoginValidation'
 import { loginActions, loginReducer } from '../../model/slice/loginSlice'
 import { getLoginError } from '../../model/selectors/getLoginError/getLoginError'
+import { getLoginIsValid } from '../../model/selectors/getLoginIsValid/getLoginIsValid'
 
 export interface LoginFormProps {
   className?: string
@@ -33,13 +31,13 @@ const initialReducers: ReducersList = {
 }
 
 const LoginForm = memo(() => {
-  const [userLogin, { data, isLoading }] = useLogin()
+  const [userLogin, { isLoading }] = useLogin()
 
   const dispatch = useAppDispatch()
   const login = useSelector(getLoginUsername) || ''
   const password = useSelector(getLoginPassword) || ''
   const error = useSelector(getLoginError)
-  const isValidate = useSelector(getLoginValidation)
+  const isValid = useSelector(getLoginIsValid)
 
   const onChangeUsername:OutlinedInputProps['onChange'] = useCallback((event) => {
     dispatch(loginActions.setLogin(event.target.value))
@@ -49,23 +47,18 @@ const LoginForm = memo(() => {
     dispatch(loginActions.setPassword(event.target.value))
   }, [dispatch])
 
-  const onLoginSubmit = useCallback((event: FormEvent) => {
-    event.preventDefault()
-    userLogin({ login, password })
-  }, [userLogin, login, password])
-
-  useEffect(() => {
-    if (data) {
-      if (data.result === ResultStatus.OK) {
-        localStorage.setItem(USER_LOCALSTORAGE_KEY, JSON.stringify(data))
-        dispatch(userActions.setAuthData(data))
-      }
-
-      if (data.result === ResultStatus.ERROR) {
-        dispatch(loginActions.setError(data.error || ''))
-      }
+  const onLoginSubmit = useCallback(async (e: FormEvent) => {
+    e.preventDefault()
+    const data = await userLogin({ login, password }).unwrap()
+    if (data.result === ResultStatus.OK) {
+      localStorage.setItem(USER_LOCALSTORAGE_KEY, JSON.stringify(data))
+      dispatch(userActions.setAuthData(data))
     }
-  }, [data, dispatch])
+
+    if (data.result === ResultStatus.ERROR) {
+      dispatch(loginActions.setError(data.error || 'Неизвестная ошибка'))
+    }
+  }, [userLogin, login, password, dispatch])
 
   return (
     <DynamicModuleLoader
@@ -101,7 +94,7 @@ const LoginForm = memo(() => {
           color="primary"
           variant="contained"
           sx={{ mt: '50px', '& span': { ml: '6px' } }}
-          disabled={isLoading || !isValidate}
+          disabled={isLoading || !isValid}
           type="submit"
         >
           Вход
