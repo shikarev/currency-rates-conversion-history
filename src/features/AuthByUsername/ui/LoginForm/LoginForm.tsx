@@ -1,22 +1,27 @@
-import { classNames } from 'shared/lib/classNames/classNames'
 import { useSelector } from 'react-redux'
 import {
   ChangeEvent, FormEvent, memo, useCallback, useEffect,
 } from 'react'
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import {
-  Button, FormControl, FormHelperText, OutlinedInput, OutlinedInputProps, Typography,
+  Button, FormHelperText, OutlinedInputProps, Typography,
 } from '@mui/material'
 import Arrow from 'shared/assets/icons/arrow.svg'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useLogin } from 'features/AuthByUsername/api/authApi'
 import { ResultStatus, userActions } from 'entities/User'
 import { USER_LOCALSTORAGE_KEY } from 'shared/const/localStorage'
+import {
+  ErrorWrapperStyled,
+  FormControlStyled,
+  InputsWrapperStyled,
+  LoginFormStyled,
+  OutlinedInputStyled,
+} from './styled'
 import { getLoginUsername } from '../../model/selectors/getLoginUsername/getLoginUsername'
 import { getLoginPassword } from '../../model/selectors/getLoginPassword/getLoginPassword'
 import { getLoginValidation } from '../../model/selectors/getLoginValidation/getLoginValidation'
 import { loginActions, loginReducer } from '../../model/slice/loginSlice'
-import cls from './LoginForm.module.scss'
 import { getLoginError } from '../../model/selectors/getLoginError/getLoginError'
 
 export interface LoginFormProps {
@@ -27,8 +32,7 @@ const initialReducers: ReducersList = {
   login: loginReducer,
 }
 
-const LoginForm = memo((props: LoginFormProps) => {
-  const { className } = props
+const LoginForm = memo(() => {
   const [userLogin, { data, isLoading }] = useLogin()
 
   const dispatch = useAppDispatch()
@@ -68,44 +72,30 @@ const LoginForm = memo((props: LoginFormProps) => {
       removeAfterUnmount
       reducers={initialReducers}
     >
-      <form className={classNames(cls.LoginForm, {}, [className])} onSubmit={onLoginSubmit}>
-        <div className={cls.inputWrapper}>
-          <FormControl sx={{ mb: '15px' }} variant="outlined">
-            <FormHelperText sx={{ fontSize: '14px', color: '#000000', mb: '2px' }}>Логин</FormHelperText>
-            <OutlinedInput
+      <LoginFormStyled onSubmit={onLoginSubmit}>
+        <InputsWrapperStyled>
+          <FormControlStyled sx={{ mb: '15px' }} variant="outlined">
+            <FormHelperText>Логин</FormHelperText>
+            <OutlinedInputStyled
               value={login}
               onChange={onChangeUsername}
               placeholder="user@mail.ru"
               type="email"
               error={!!error}
-              sx={{
-                borderRadius: '5px',
-                fontSize: '16px',
-                '& .MuiOutlinedInput-input': {
-                  p: '10px',
-                },
-              }}
             />
-          </FormControl>
+          </FormControlStyled>
 
-          <FormControl variant="outlined">
-            <FormHelperText sx={{ fontSize: '14px', color: '#000000', mb: '2px' }}>Пароль</FormHelperText>
-            <OutlinedInput
+          <FormControlStyled variant="outlined">
+            <FormHelperText>Пароль</FormHelperText>
+            <OutlinedInputStyled
               value={password}
               onChange={onChangePassword}
               error={!!error}
               placeholder="*********"
               type="password"
-              sx={{
-                borderRadius: '5px',
-                fontSize: '16px',
-                '& .MuiOutlinedInput-input': {
-                  p: '10px',
-                },
-              }}
             />
-          </FormControl>
-        </div>
+          </FormControlStyled>
+        </InputsWrapperStyled>
 
         <Button
           color="primary"
@@ -119,20 +109,19 @@ const LoginForm = memo((props: LoginFormProps) => {
           <span><Arrow /></span>
         </Button>
 
-        <div className={cls.errorWrapper}>
-          {error
-              && (
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: '#D32F2F',
-                  }}
-                >
-                  {error}
-                </Typography>
-              )}
-        </div>
-      </form>
+        <ErrorWrapperStyled>
+          {error ? (
+            <Typography
+              sx={{
+                fontSize: '12px',
+                color: '#D32F2F',
+              }}
+            >
+              {error}
+            </Typography>
+          ) : null}
+        </ErrorWrapperStyled>
+      </LoginFormStyled>
     </DynamicModuleLoader>
   )
 })
