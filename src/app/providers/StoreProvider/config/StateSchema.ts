@@ -5,11 +5,11 @@ import {
   AnyAction, CombinedState, Reducer, ReducersMapObject,
 } from '@reduxjs/toolkit'
 import { ExchangeRateSchema } from 'entities/ExchangeRate'
-import { converterSchema } from 'entities/Converter/model/types/converter'
+import { ConverterSchema } from 'entities/Converter/model/types/converter'
 
 export interface StateSchema {
   user: UserSchema
-  converter: converterSchema
+  converter: ConverterSchema
   [authApi.reducerPath]: ReturnType<typeof authApi.reducer>
 
   // Async Reducers

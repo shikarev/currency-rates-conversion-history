@@ -1,9 +1,9 @@
-export interface converterSchema {
+export interface ConverterSchema {
     amount: string,
     assetFrom: string,
     assetTo: string,
-    fromAssetList: string[],
-    toAssetList: string[],
+    fromAssetsList: string[],
+    toAssetsList: string[],
     isLoading: boolean,
     total: string
 }

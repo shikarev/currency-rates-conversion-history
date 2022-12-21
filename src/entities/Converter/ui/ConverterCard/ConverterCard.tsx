@@ -5,17 +5,17 @@ import { classNames } from 'shared/lib/classNames/classNames'
 import { useSelector } from 'react-redux'
 import { getCurrencyPairList } from 'entities/ExchangeRate/model/selectors/getCurrencyPairList/getCurrencyPairList'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { getAmount } from 'entities/Converter/model/selectors/getConverter/getConverter'
-import { getFirst } from 'entities/Converter/model/selectors/getFirst/getFirst'
-import { getSecond } from 'entities/Converter/model/selectors/getSecond/getSecond'
 import {
   ChangeEvent, FormEvent, useCallback, useEffect,
 } from 'react'
 import { converterActions } from 'entities/Converter'
-import { getTotal } from 'entities/Converter/model/selectors/getTotal/getTotal'
 import SelectArrow from 'shared/assets/icons/select-arrow-down.svg'
-import { getSecondItems } from 'entities/Converter/model/selectors/getSecondItems/getSecondItems'
-import { getFirstItems } from 'entities/Converter/model/selectors/getFirstItems/getFirstItems'
+import { getAmount } from '../../model/selectors/getAmount/getAmount'
+import { getAssetFrom } from '../../model/selectors/getAssetFrom/getAssetFrom'
+import { getAssetTo } from '../../model/selectors/getAssetTo/getAssetTo'
+import { getTotal } from '../../model/selectors/getTotal/getTotal'
+import { getToAssetsList } from '../../model/selectors/getToAssetsList/getToAssetsList'
+import { getFromAssetsList } from '../../model/selectors/getFromAssetsList/getFromAssetsList'
 import cls from './ConverterCard.module.scss'
 
 interface ConverterCardProps {
@@ -30,41 +30,39 @@ const ConverterCard = (props: ConverterCardProps) => {
 
   const amount = useSelector(getAmount)
   const total = useSelector(getTotal)
+  const assetFrom = useSelector(getAssetFrom)
+  const assetTo = useSelector(getAssetTo)
+  const fromAssetsList = useSelector(getFromAssetsList)
+  const toAssetsList = useSelector(getToAssetsList)
 
-  const firstPair = useSelector(getFirst)
-  const secondPair = useSelector(getSecond)
-
-  const selectorOne = useSelector(getFirstItems)
-  const selectorTwo = useSelector(getSecondItems)
-
-  const handleTotal = (e: FormEvent) => {
-    e.preventDefault()
-    const result = `${firstPair}/${secondPair}`
+  const handleTotal = (event: FormEvent) => {
+    event.preventDefault()
+    const result = `${assetFrom}/${assetTo}`
     const quotes = update?.find((x) => x.asset === result)?.quote
 
     const finish = Number(amount) * Number(quotes)
     dispatch(converterActions.setTotal(String(finish.toFixed(4))))
   }
 
-  const onChangeConverter = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, '')
+  const onChangeConverter = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value.replace(/\D/g, '')
     dispatch(converterActions.setCurrency(value))
   }, [dispatch])
 
-  const onChangeFirstPair = useCallback((e: SelectChangeEvent) => {
+  const onChangeFirstPair = useCallback((event: SelectChangeEvent) => {
     if (update) {
       const newItem = update.map((item) => (
         item.asset
-      )).filter((item) => item.includes(`${e.target.value}/`))
+      )).filter((item) => item.includes(`${event.target.value}/`))
       console.log(newItem)
 
       dispatch(converterActions.getAsset(newItem))
-      dispatch(converterActions.setFirst(e.target.value))
+      dispatch(converterActions.setFirst(event.target.value))
     }
   }, [dispatch, update])
 
-  const onChangeAssetTo = useCallback((e: SelectChangeEvent) => {
-    dispatch(converterActions.setAssetTo(e.target.value))
+  const onChangeAssetTo = useCallback((event: SelectChangeEvent) => {
+    dispatch(converterActions.setAssetTo(event.target.value))
   }, [dispatch])
 
   useEffect(() => {
@@ -125,7 +123,7 @@ const ConverterCard = (props: ConverterCardProps) => {
 
             <FormControl sx={{ width: '80px', mr: '5px' }} variant="outlined">
               <Select
-                value={firstPair}
+                value={assetFrom}
                 onChange={onChangeFirstPair}
                 IconComponent={SelectArrow}
                 sx={{
@@ -141,7 +139,7 @@ const ConverterCard = (props: ConverterCardProps) => {
                   },
                 }}
               >
-                {selectorOne.map((item) => (
+                {fromAssetsList.map((item) => (
                   <MenuItem key={item} value={item}>{item}</MenuItem>
                 ))}
               </Select>
@@ -149,7 +147,7 @@ const ConverterCard = (props: ConverterCardProps) => {
 
             <FormControl sx={{ width: '80px', mr: '20px' }} variant="outlined">
               <Select
-                value={secondPair}
+                value={assetTo}
                 onChange={onChangeAssetTo}
                 IconComponent={SelectArrow}
                 displayEmpty
@@ -166,7 +164,7 @@ const ConverterCard = (props: ConverterCardProps) => {
                   },
                 }}
               >
-                {selectorTwo.map((item) => (
+                {toAssetsList.map((item) => (
                   <MenuItem key={item} value={item}>{item}</MenuItem>
                 ))}
               </Select>

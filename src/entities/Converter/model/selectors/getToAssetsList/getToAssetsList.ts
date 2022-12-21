@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit'
 import { getConverter } from 'entities/Converter/model/selectors/getConverter'
 
-export const getTotal = createSelector(
+export const getToAssetsList = createSelector(
   [getConverter],
-  (converter) => converter.total,
+  (converter) => converter.toAssetsList,
 )

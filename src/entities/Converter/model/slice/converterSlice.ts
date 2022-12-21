@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Table } from 'entities/ExchangeRate/model/types/exchangeRate'
-import { converterSchema } from '../types/converter'
+import { ConverterSchema } from '../types/converter'
 
-const initialState: converterSchema = {
+const initialState: ConverterSchema = {
   amount: '',
   assetFrom: '',
-  fromAssetList: [],
+  fromAssetsList: [],
   assetTo: '',
-  toAssetList: [],
+  toAssetsList: [],
   isLoading: false,
   total: '',
 }
@@ -36,8 +36,8 @@ export const converterSlice = createSlice({
 
       state.assetFrom = fromAsset
       state.assetTo = toAsset
-      state.fromAssetList = fromAssets.filter((element, index) => fromAssets.indexOf(element) === index)
-      state.toAssetList = assets.filter((item) => item.includes(`${fromAsset}/`)).map((item) => (
+      state.fromAssetsList = fromAssets.filter((element, index) => fromAssets.indexOf(element) === index)
+      state.toAssetsList = assets.filter((item) => item.includes(`${fromAsset}/`)).map((item) => (
         item.split('/')[1]
       ))
     },
@@ -46,7 +46,7 @@ export const converterSlice = createSlice({
       const secondPair = action.payload.map((item) => (
         item.split('/')[1]
       ))
-      state.toAssetList = secondPair
+      state.toAssetsList = secondPair
     },
 
     setTotal: (state, action: PayloadAction<string>) => {
@@ -61,7 +61,7 @@ export const converterSlice = createSlice({
       const secondItem = action.payload[0].split('/')[1]
 
       state.assetTo = secondItem
-      state.toAssetList = secondPair
+      state.toAssetsList = secondPair
     },
   },
 })
