@@ -5,11 +5,11 @@ import { Navbar } from 'widgets/Navbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from 'entities/User'
 import { Loader } from 'shared/ui/Loader/Loader'
-import { getUserInited } from 'entities/User/model/selectors/getUserInited/getUserInited'
+import { getUserInitialized } from 'entities/User/model/selectors/getUserInitialized/getUserInitialized'
 
 function App() {
   const dispatch = useDispatch()
-  const inited = useSelector(getUserInited)
+  const userInitialized = useSelector(getUserInitialized)
 
   useEffect(() => {
     dispatch(userActions.initAuthData())
@@ -20,7 +20,7 @@ function App() {
       <Suspense fallback={<Loader />}>
         <Navbar />
         <div className="content-page">
-          {inited ? <AppRouter /> : null }
+          {userInitialized ? <AppRouter /> : null }
         </div>
       </Suspense>
     </div>

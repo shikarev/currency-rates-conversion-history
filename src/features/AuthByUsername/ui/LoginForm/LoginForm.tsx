@@ -1,93 +1,74 @@
 import { classNames } from 'shared/lib/classNames/classNames'
 import { useSelector } from 'react-redux'
 import {
-  ChangeEvent, memo, useCallback, useEffect,
+  ChangeEvent, FormEvent, memo, useCallback, useEffect,
 } from 'react'
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import {
-  Button, FormControl, FormHelperText, OutlinedInput, Typography,
+  Button, FormControl, FormHelperText, OutlinedInput, OutlinedInputProps, Typography,
 } from '@mui/material'
 import Arrow from 'shared/assets/icons/arrow.svg'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { useLoginByResponse } from 'features/AuthByUsername/api/authApi'
+import { useLogin } from 'features/AuthByUsername/api/authApi'
 import { ResultStatus, userActions } from 'entities/User'
 import { USER_LOCALSTORAGE_KEY } from 'shared/const/localStorage'
 import { getLoginUsername } from '../../model/selectors/getLoginUsername/getLoginUsername'
 import { getLoginPassword } from '../../model/selectors/getLoginPassword/getLoginPassword'
-import { getLoginIsLoading } from '../../model/selectors/getLoginIsLoading/getLoginIsLoading'
 import { getLoginValidation } from '../../model/selectors/getLoginValidation/getLoginValidation'
 import { loginActions, loginReducer } from '../../model/slice/loginSlice'
 import cls from './LoginForm.module.scss'
+import { getLoginError } from '../../model/selectors/getLoginError/getLoginError'
 
 export interface LoginFormProps {
   className?: string
-  onSuccess: () => void
 }
 
 const initialReducers: ReducersList = {
-  loginForm: loginReducer,
+  login: loginReducer,
 }
 
 const LoginForm = memo((props: LoginFormProps) => {
-  const { className, onSuccess } = props
-  const [loginByResponse, { data, error }] = useLoginByResponse()
+  const { className } = props
+  const [userLogin, { data, isLoading }] = useLogin()
 
   const dispatch = useAppDispatch()
-  const login = useSelector(getLoginUsername)
-  const password = useSelector(getLoginPassword)
-  const isLoading = useSelector(getLoginIsLoading)
+  const login = useSelector(getLoginUsername) || ''
+  const password = useSelector(getLoginPassword) || ''
+  const error = useSelector(getLoginError)
   const isValidate = useSelector(getLoginValidation)
-  // const error = useSelector(getLoginError)
 
-  const onChangeUsername = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(loginActions.setUsername(e.target.value))
+  const onChangeUsername:OutlinedInputProps['onChange'] = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(loginActions.setLogin(e.target.value))
   }, [dispatch])
 
-  const onChangePassword = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const onChangePassword:OutlinedInputProps['onChange'] = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     dispatch(loginActions.setPassword(e.target.value))
   }, [dispatch])
 
-  const onLoginClick = useCallback(() => {
-    loginByResponse({ login, password })
-  }, [loginByResponse, login, password])
+  const onLoginSubmit = useCallback((e: FormEvent) => {
+    e.preventDefault()
+    userLogin({ login, password })
+  }, [userLogin, login, password])
 
   useEffect(() => {
     if (data) {
       if (data.result === ResultStatus.OK) {
-        console.log(data.result)
         localStorage.setItem(USER_LOCALSTORAGE_KEY, JSON.stringify(data))
         dispatch(userActions.setAuthData(data))
       }
-    }
-  }, [data, dispatch])
 
-  useEffect(() => {
-    if (error) {
-      //
-    }
-  }, [error])
-
-  useEffect(() => {
-    const keyDownHandler = (event: { key: string; preventDefault: () => void }) => {
-      if (event.key === 'Enter') {
-        event.preventDefault()
-        onLoginClick()
+      if (data.result === ResultStatus.ERROR) {
+        dispatch(loginActions.setError(data.error || ''))
       }
     }
-
-    document.addEventListener('keydown', keyDownHandler)
-
-    return () => {
-      document.removeEventListener('keydown', keyDownHandler)
-    }
-  }, [onLoginClick])
+  }, [data, dispatch])
 
   return (
     <DynamicModuleLoader
       removeAfterUnmount
       reducers={initialReducers}
     >
-      <div className={classNames(cls.LoginForm, {}, [className])}>
+      <form className={classNames(cls.LoginForm, {}, [className])} onSubmit={onLoginSubmit}>
         <div className={cls.inputWrapper}>
           <FormControl sx={{ mb: '15px' }} variant="outlined">
             <FormHelperText sx={{ fontSize: '14px', color: '#000000', mb: '2px' }}>Логин</FormHelperText>
@@ -131,7 +112,6 @@ const LoginForm = memo((props: LoginFormProps) => {
           variant="contained"
           sx={{ mt: '50px', '& span': { ml: '6px' } }}
           disabled={isLoading || !isValidate}
-          onClick={onLoginClick}
           type="submit"
         >
           Вход
@@ -152,7 +132,7 @@ const LoginForm = memo((props: LoginFormProps) => {
                 </Typography>
               )}
         </div>
-      </div>
+      </form>
     </DynamicModuleLoader>
   )
 })

@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit'
-import { getLoginForm } from '../getLoginForm'
+import { getLogin } from '../getLogin'
 
 export const getLoginUsername = createSelector(
-  [getLoginForm],
-  (loginForm) => loginForm?.login || '',
+  [getLogin],
+  (login) => login?.login,
 )

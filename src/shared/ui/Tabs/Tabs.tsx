@@ -5,10 +5,6 @@ import { ConverterCard } from 'entities/Converter/ui/ConverterCard/ConverterCard
 import { HistoryQuotesCard } from 'entities/HistoryQuotes/ui/HistoryQuotesCard/HistoryQuotesCard'
 import { Tab } from '../Tab/Tab'
 
-interface TabsProps {
-
-}
-
 interface TabPanelProps {
     children?: ReactNode;
     index: number
@@ -36,7 +32,7 @@ function TabPanel(props: TabPanelProps) {
   )
 }
 
-const Tabs = (props: TabsProps) => {
+const Tabs = () => {
   const [value, setValue] = useState(0)
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {

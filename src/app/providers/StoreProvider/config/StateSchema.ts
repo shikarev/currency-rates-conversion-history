@@ -15,7 +15,7 @@ export interface StateSchema {
   [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>;
 
   // Async Reducers
-  loginForm?: LoginSchema
+  login?: LoginSchema
   exchangeRate?: ExchangeRateSchema
   historyQuotes?: any
 }

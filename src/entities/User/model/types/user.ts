@@ -10,6 +10,5 @@ export interface Response {
 
 export interface UserSchema {
   authData?: Response
-
-  _inited: boolean;
+  initialized: boolean;
 }

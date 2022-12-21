@@ -1,36 +1,46 @@
-import { Navigate, RouteProps } from 'react-router-dom'
+import { RouteProps } from 'react-router-dom'
 import { MainPage } from 'pages/MainPage'
 import { NotFoundPage } from 'pages/NotFoundPage'
 import { LoginPage } from 'pages/LoginPage'
-import DefaultPage from 'pages/DefaultPage'
 
 type AppRouteProps = RouteProps & {
-  authOnly?: boolean
+  path: string
+  authorizedOnly?: boolean
 }
 
 export enum AppRoutes {
-  DEFAULT = 'default',
   MAIN = 'main',
   LOGIN = 'login',
   NOT_FOUND = 'not_found'
 }
 
-export const RouterPath: Record<AppRoutes, string> = {
-  [AppRoutes.DEFAULT]: '/',
+export const routes: Record<AppRoutes, AppRouteProps> = {
+  [AppRoutes.MAIN]: {
+    path: '/main',
+    element: <MainPage />,
+    authorizedOnly: true,
+  },
+  [AppRoutes.LOGIN]: {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  [AppRoutes.NOT_FOUND]: {
+    path: '*',
+    element: <NotFoundPage />,
+  },
+}
+
+/* export const RouterPath: Record<AppRoutes, string> = {
   [AppRoutes.MAIN]: '/main',
   [AppRoutes.LOGIN]: '/login',
   [AppRoutes.NOT_FOUND]: '*',
 }
 
 export const routeConfig: Record<AppRoutes, AppRouteProps> = {
-  [AppRoutes.DEFAULT]: {
-    path: RouterPath.default,
-    element: <DefaultPage />,
-  },
   [AppRoutes.MAIN]: {
     path: RouterPath.main,
     element: <MainPage />,
-    authOnly: true,
+    authorizedOnly: true,
   },
   [AppRoutes.LOGIN]: {
     path: RouterPath.login,
@@ -40,4 +50,4 @@ export const routeConfig: Record<AppRoutes, AppRouteProps> = {
     path: RouterPath.not_found,
     element: <NotFoundPage />,
   },
-}
+} */
