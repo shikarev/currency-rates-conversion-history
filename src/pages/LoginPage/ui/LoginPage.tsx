@@ -1,13 +1,10 @@
-import { Box } from '@mui/material'
 import { LoginWidget } from 'features/AuthByUsername'
-import cls from './LoginPage.module.scss'
+import { LoginPageBoxStyled } from './styled'
 
 const LoginPage = () => (
-  <Box
-    className={cls.LoginPage}
-  >
+  <LoginPageBoxStyled>
     <LoginWidget />
-  </Box>
+  </LoginPageBoxStyled>
 )
 
 export default LoginPage
