@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { LoginSchema } from '../types/loginSchema'
 
 const emailRegex = /^[-+\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,30}$/
-const passwordRegex = /(?=[\w]+$)(?=.{7,}).*$/
+export const passwordRegex = /(?=[\w]+$)(?=.{7,}).*$/
 
 const initialState: LoginSchema = {
   login: '',
