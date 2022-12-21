@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import {
-  ChangeEvent, FormEvent, memo, useCallback, useEffect,
+  FormEvent, memo, useCallback, useEffect,
 } from 'react'
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import {
@@ -41,16 +41,16 @@ const LoginForm = memo(() => {
   const error = useSelector(getLoginError)
   const isValidate = useSelector(getLoginValidation)
 
-  const onChangeUsername:OutlinedInputProps['onChange'] = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(loginActions.setLogin(e.target.value))
+  const onChangeUsername:OutlinedInputProps['onChange'] = useCallback((event) => {
+    dispatch(loginActions.setLogin(event.target.value))
   }, [dispatch])
 
-  const onChangePassword:OutlinedInputProps['onChange'] = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(loginActions.setPassword(e.target.value))
+  const onChangePassword:OutlinedInputProps['onChange'] = useCallback((event) => {
+    dispatch(loginActions.setPassword(event.target.value))
   }, [dispatch])
 
-  const onLoginSubmit = useCallback((e: FormEvent) => {
-    e.preventDefault()
+  const onLoginSubmit = useCallback((event: FormEvent) => {
+    event.preventDefault()
     userLogin({ login, password })
   }, [userLogin, login, password])
 
