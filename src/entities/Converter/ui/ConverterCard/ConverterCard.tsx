@@ -8,7 +8,9 @@ import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { getAmount } from 'entities/Converter/model/selectors/getConverter/getConverter'
 import { getFirst } from 'entities/Converter/model/selectors/getFirst/getFirst'
 import { getSecond } from 'entities/Converter/model/selectors/getSecond/getSecond'
-import { ChangeEvent, useCallback, useEffect } from 'react'
+import {
+  ChangeEvent, FormEvent, useCallback, useEffect,
+} from 'react'
 import { converterActions } from 'entities/Converter'
 import { getTotal } from 'entities/Converter/model/selectors/getTotal/getTotal'
 import SelectArrow from 'shared/assets/icons/select-arrow-down.svg'
@@ -35,16 +37,18 @@ const ConverterCard = (props: ConverterCardProps) => {
   const selectorOne = useSelector(getFirstItems)
   const selectorTwo = useSelector(getSecondItems)
 
-  const handleTotal = () => {
+  const handleTotal = (e: FormEvent) => {
+    e.preventDefault()
     const result = `${firstPair}/${secondPair}`
     const quotes = update?.find((x) => x.asset === result)?.quote
 
     const finish = Number(amount) * Number(quotes)
-    dispatch(converterActions.setTotal(String(finish.toFixed(0))))
+    dispatch(converterActions.setTotal(String(finish.toFixed(4))))
   }
 
   const onChangeConverter = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(converterActions.setCurrency(e.target.value))
+    const value = e.target.value.replace(/\D/g, '')
+    dispatch(converterActions.setCurrency(value))
   }, [dispatch])
 
   const onChangeFirstPair = useCallback((e: SelectChangeEvent) => {
@@ -52,25 +56,25 @@ const ConverterCard = (props: ConverterCardProps) => {
       const newItem = update.map((item) => (
         item.asset
       )).filter((item) => item.includes(`${e.target.value}/`))
+      console.log(newItem)
 
-      dispatch(converterActions.setSecondItems(newItem))
-      dispatch(converterActions.setSecond(newItem[0].split('/')[1]))
+      dispatch(converterActions.getAsset(newItem))
       dispatch(converterActions.setFirst(e.target.value))
     }
   }, [dispatch, update])
 
-  const onChangeSecondPair = useCallback((e: SelectChangeEvent) => {
-    dispatch(converterActions.setSecond(e.target.value))
+  const onChangeAssetTo = useCallback((e: SelectChangeEvent) => {
+    dispatch(converterActions.setAssetTo(e.target.value))
   }, [dispatch])
 
   useEffect(() => {
     if (update) {
-      dispatch(converterActions.setFirstItems(update))
+      dispatch(converterActions.setDefaultAssets(update))
     }
   }, [dispatch, update])
 
   return (
-    <div className={classNames(cls.ConverterCard, {}, [className])}>
+    <form className={classNames(cls.ConverterCard, {}, [className])} onSubmit={handleTotal}>
       <Box
         sx={{
           display: 'flex',
@@ -146,7 +150,7 @@ const ConverterCard = (props: ConverterCardProps) => {
             <FormControl sx={{ width: '80px', mr: '20px' }} variant="outlined">
               <Select
                 value={secondPair}
-                onChange={onChangeSecondPair}
+                onChange={onChangeAssetTo}
                 IconComponent={SelectArrow}
                 displayEmpty
                 sx={{
@@ -171,7 +175,7 @@ const ConverterCard = (props: ConverterCardProps) => {
               color="primary"
               variant="contained"
               sx={{ width: '150px' }}
-              onClick={() => handleTotal()}
+              type="submit"
             >
               Расчитать
             </Button>
@@ -197,7 +201,7 @@ const ConverterCard = (props: ConverterCardProps) => {
           </Box>
         </Box>
       </Box>
-    </div>
+    </form>
   )
 }
 

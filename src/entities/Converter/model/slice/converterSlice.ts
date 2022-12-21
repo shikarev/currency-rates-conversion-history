@@ -4,10 +4,10 @@ import { converterSchema } from '../types/converter'
 
 const initialState: converterSchema = {
   amount: '',
-  first: '',
-  firstItems: [],
-  second: '',
-  secondItems: [],
+  assetFrom: '',
+  fromAssetList: [],
+  assetTo: '',
+  toAssetList: [],
   isLoading: false,
   total: '',
 }
@@ -21,46 +21,47 @@ export const converterSlice = createSlice({
     },
 
     setFirst: (state, action: PayloadAction<string>) => {
-      state.first = action.payload
+      state.assetFrom = action.payload
     },
 
-    setSecond: (state, action: PayloadAction<string>) => {
-      state.second = action.payload
+    setAssetTo: (state, action: PayloadAction<string>) => {
+      state.assetTo = action.payload
     },
 
-    setFirstItems: (state, action: PayloadAction<Table[]>) => {
-      const firstPair = action.payload.map((item) => (
-        item.asset.split('/')[0]
-      ))
-      const filteredItem = firstPair.filter((element, index) => firstPair.indexOf(element) === index)
-      state.firstItems = filteredItem
+    setDefaultAssets: (state, action: PayloadAction<Table[]>) => {
+      const assets = action.payload.map((item) => item.asset)
 
-      const firstInArray = filteredItem[0]
-      state.first = firstInArray
+      const [fromAsset, toAsset] = assets[0].split('/')
+      const fromAssets = assets.map((item) => item.split('/')[0])
 
-      const secondFilter = action.payload.map((item) => (
-        item.asset
-      )).filter((item) => item.includes(`${firstInArray}/`))
-
-      const secondPair = secondFilter.map((item) => (
+      state.assetFrom = fromAsset
+      state.assetTo = toAsset
+      state.fromAssetList = fromAssets.filter((element, index) => fromAssets.indexOf(element) === index)
+      state.toAssetList = assets.filter((item) => item.includes(`${fromAsset}/`)).map((item) => (
         item.split('/')[1]
       ))
-
-      const secondChoose = secondFilter[0].split('/')[1]
-
-      state.second = secondChoose
-      state.secondItems = secondPair
     },
 
     setSecondItems: (state, action: PayloadAction<string[]>) => {
       const secondPair = action.payload.map((item) => (
         item.split('/')[1]
       ))
-      state.secondItems = secondPair
+      state.toAssetList = secondPair
     },
 
     setTotal: (state, action: PayloadAction<string>) => {
       state.total = action.payload
+    },
+
+    getAsset: (state, action: PayloadAction<string[]>) => {
+      const secondPair = action.payload.map((item) => (
+        item.split('/')[1]
+      ))
+
+      const secondItem = action.payload[0].split('/')[1]
+
+      state.assetTo = secondItem
+      state.toAssetList = secondPair
     },
   },
 })

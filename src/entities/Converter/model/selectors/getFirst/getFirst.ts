@@ -1,3 +1,3 @@
 import { StateSchema } from 'app/providers/StoreProvider'
 
-export const getFirst = (state: StateSchema) => state.converter.first
+export const getFirst = (state: StateSchema) => state.converter.assetFrom
