@@ -30,7 +30,7 @@ const initialReducers: ReducersList = {
   login: loginReducer,
 }
 
-const LoginForm = memo(() => {
+const LoginForm: React.FC = memo(() => {
   const [userLogin, { isLoading }] = useLogin()
 
   const dispatch = useAppDispatch()
