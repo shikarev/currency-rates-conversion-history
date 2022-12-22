@@ -67,7 +67,7 @@ const LoginForm: React.FC = memo(() => {
     >
       <LoginFormStyled onSubmit={onLoginSubmit}>
         <InputsWrapperStyled>
-          <FormControlStyled sx={{ mb: '15px' }} variant="outlined">
+          <FormControlStyled variant="outlined">
             <FormHelperText>Логин</FormHelperText>
             <OutlinedInputStyled
               value={login}

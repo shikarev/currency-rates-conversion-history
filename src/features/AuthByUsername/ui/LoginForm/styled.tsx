@@ -14,22 +14,24 @@ export const LoginFormStyled = styled('form')({
 export const InputsWrapperStyled = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
-  mb: '10px',
-  mt: '42px',
+  marginBottom: '10px',
+  marginTop: '42px',
 })
 
 export const OutlinedInputStyled = styled(OutlinedInput)({
   borderRadius: '5px',
   fontSize: '16px',
   '& .MuiOutlinedInput-input': {
-    p: '10px',
+    padding: '10px',
   },
 })
 
 export const FormControlStyled = styled(FormControl)({
-  mb: '15px',
+  '&:not(:last-child)': {
+    marginBottom: '15px',
+  },
   '& .MuiFormHelperText-root': {
-    fontSize: '14px', color: '#000000', mb: '2px',
+    fontSize: '14px', color: '#000000', marginBottom: '2px',
   },
 })
 
@@ -38,5 +40,5 @@ export const ErrorWrapperStyled = styled(Box)({
   alignItems: 'flex-start',
   justifyContent: 'center',
   height: '72px',
-  mt: '5px',
+  marginTop: '5px',
 })
