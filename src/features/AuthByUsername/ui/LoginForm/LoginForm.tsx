@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { FormEventHandler, memo, useCallback } from 'react'
+import React, { memo, useCallback } from 'react'
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import {
   Button, FormHelperText, OutlinedInputProps, Typography,
@@ -47,8 +47,8 @@ const LoginForm = memo(() => {
     dispatch(loginActions.setPassword(event.target.value))
   }, [dispatch])
 
-  const onLoginSubmit:FormEventHandler = useCallback(async (e) => {
-    e.preventDefault()
+  const onLoginSubmit:React.FormEventHandler = useCallback(async (event) => {
+    event.preventDefault()
     const data = await userLogin({ login, password }).unwrap()
     if (data.result === ResultStatus.OK) {
       localStorage.setItem(USER_LOCALSTORAGE_KEY, JSON.stringify(data))
