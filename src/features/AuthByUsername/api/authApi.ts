@@ -1,12 +1,12 @@
-import { rtkApi } from 'shared/api/rtkApi'
 import { Response } from 'entities/User'
+import { unauthorizedApi } from 'shared/api/api'
 
 interface loginProps {
     login: string,
     password: string
 }
 
-const authApi = rtkApi.injectEndpoints({
+const authApi = unauthorizedApi.injectEndpoints({
   endpoints: (build) => ({
     login: build.mutation<Response, loginProps>({
       query: ({ login, password }) => ({

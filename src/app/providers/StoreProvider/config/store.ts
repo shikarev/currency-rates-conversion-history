@@ -3,7 +3,7 @@ import {
 } from '@reduxjs/toolkit'
 import { userReducer } from 'entities/User'
 import { converterReducer } from 'entities/Converter'
-import { rtkApi } from 'shared/api/rtkApi'
+import { authorizedApi, unauthorizedApi } from 'shared/api/api'
 import { createReducerManager } from './reducerManager'
 import { StateSchema } from './StateSchema'
 
@@ -15,7 +15,8 @@ export function createReduxStore(
     ...asyncReducers,
     user: userReducer,
     converter: converterReducer,
-    [rtkApi.reducerPath]: rtkApi.reducer,
+    [unauthorizedApi.reducerPath]: unauthorizedApi.reducer,
+    [authorizedApi.reducerPath]: authorizedApi.reducer,
   }
 
   const reducerManager = createReducerManager(rootReducers)
@@ -24,7 +25,8 @@ export function createReduxStore(
     reducer: reducerManager.reduce as Reducer<CombinedState<StateSchema>>,
     devTools: __IS_DEV__,
     preloadedState: initialState,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(rtkApi.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+      .concat(unauthorizedApi.middleware, authorizedApi.middleware),
   })
 
   // @ts-ignore
