@@ -15,7 +15,7 @@ import {
   InputsWrapperStyled,
   LoginFormStyled,
   OutlinedInputStyled,
-} from './styled'
+} from './LoginForm.styled'
 import { getLoginUsername } from '../../model/selectors/getLoginUsername/getLoginUsername'
 import { getLoginPassword } from '../../model/selectors/getLoginPassword/getLoginPassword'
 import { loginActions, loginReducer } from '../../model/slice/loginSlice'

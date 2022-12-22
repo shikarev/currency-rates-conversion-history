@@ -1,5 +1,5 @@
 import { LoginWidget } from 'features/AuthByUsername'
-import { LoginPageBoxStyled } from './styled'
+import { LoginPageBoxStyled } from './LoginPage.styled'
 
 const LoginPage = () => (
   <LoginPageBoxStyled>
