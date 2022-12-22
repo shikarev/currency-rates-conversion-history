@@ -1,20 +1,20 @@
 import { useSelector } from 'react-redux'
 import React, { memo, useCallback } from 'react'
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
-import {
-  Button, FormHelperText, OutlinedInputProps, Typography,
-} from '@mui/material'
+import { FormHelperText, OutlinedInputProps } from '@mui/material'
 import Arrow from 'shared/assets/icons/arrow.svg'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useLogin } from 'features/AuthByUsername/api/authApi'
 import { ResultStatus, userActions } from 'entities/User'
 import { USER_LOCALSTORAGE_KEY } from 'shared/const/localStorage'
 import {
+  ErrorTypographyStyled,
   ErrorWrapperStyled,
   FormControlStyled,
   InputsWrapperStyled,
   LoginFormStyled,
   OutlinedInputStyled,
+  SubmitButtonStyled,
 } from './LoginForm.styled'
 import { getLoginUsername } from '../../model/selectors/getLoginUsername/getLoginUsername'
 import { getLoginPassword } from '../../model/selectors/getLoginPassword/getLoginPassword'
@@ -90,29 +90,23 @@ const LoginForm: React.FC = memo(() => {
           </FormControlStyled>
         </InputsWrapperStyled>
 
-        <Button
+        <SubmitButtonStyled
           color="primary"
           variant="contained"
-          sx={{ mt: '50px', '& span': { ml: '6px' } }}
           disabled={isLoading || !isValid}
           type="submit"
         >
           Вход
           {' '}
           <span><Arrow /></span>
-        </Button>
+        </SubmitButtonStyled>
 
         <ErrorWrapperStyled>
-          {error ? (
-            <Typography
-              sx={{
-                fontSize: '12px',
-                color: '#D32F2F',
-              }}
-            >
+          {!error ? null : (
+            <ErrorTypographyStyled>
               {error}
-            </Typography>
-          ) : null}
+            </ErrorTypographyStyled>
+          )}
         </ErrorWrapperStyled>
       </LoginFormStyled>
     </DynamicModuleLoader>

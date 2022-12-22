@@ -1,5 +1,5 @@
 import {
-  Box, FormControl, OutlinedInput, styled,
+  Box, Button, FormControl, OutlinedInput, styled, Typography,
 } from '@mui/material'
 
 export const LoginFormStyled = styled('form')({
@@ -41,4 +41,14 @@ export const ErrorWrapperStyled = styled(Box)({
   justifyContent: 'center',
   height: '72px',
   marginTop: '5px',
+})
+
+export const ErrorTypographyStyled = styled(Typography)({
+  fontSize: '12px',
+  color: '#D32F2F',
+})
+
+export const SubmitButtonStyled = styled(Button)({
+  marginTop: '50px',
+  '& span': { marginLeft: '6px' },
 })
