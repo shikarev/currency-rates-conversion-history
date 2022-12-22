@@ -7,7 +7,6 @@ import {
 import { ExchangeRateSchema } from 'entities/ExchangeRate'
 import { converterSchema } from 'entities/Converter/model/types/converter'
 import { rtkApi } from 'shared/api/rtkApi'
-import { AxiosInstance } from 'axios'
 
 export interface StateSchema {
   user: UserSchema
@@ -31,8 +30,4 @@ export interface ReducerManager {
 
 export interface ReduxStoreWithManager extends ToolkitStore<StateSchema> {
   reducerManager: ReducerManager
-}
-
-export interface ThunkExtraArg {
-  api: AxiosInstance;
 }
