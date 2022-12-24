@@ -4,7 +4,6 @@ import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/Dynamic
 import { FormHelperText, OutlinedInputProps } from '@mui/material'
 import Arrow from 'shared/assets/icons/arrow.svg'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { useLoginMutation } from 'features/AuthByUsername/api/authApi'
 import { authLogin } from 'features/AuthByUsername/model/services/authLogin/authLogin'
 import {
   ErrorTypographyStyled,
@@ -20,6 +19,7 @@ import { getLoginPassword } from '../../model/selectors/getLoginPassword/getLogi
 import { loginActions, loginReducer } from '../../model/slice/loginSlice'
 import { getLoginError } from '../../model/selectors/getLoginError/getLoginError'
 import { getLoginIsValid } from '../../model/selectors/getLoginIsValid/getLoginIsValid'
+import { getLoginIsLoading } from '../../model/selectors/getLoginIsLoading/getLoginIsLoading'
 
 export interface LoginFormProps {
   className?: string
@@ -30,11 +30,10 @@ const initialReducers: ReducersList = {
 }
 
 const LoginForm: React.FC = memo(() => {
-  const [userLogin, { isLoading }] = useLoginMutation()
-
   const dispatch = useAppDispatch()
   const login = useSelector(getLoginUsername) || ''
   const password = useSelector(getLoginPassword) || ''
+  const isLoading = useSelector(getLoginIsLoading)
   const error = useSelector(getLoginError)
   const isValid = useSelector(getLoginIsValid)
 
@@ -48,10 +47,8 @@ const LoginForm: React.FC = memo(() => {
 
   const onLoginSubmit:React.FormEventHandler = useCallback((event) => {
     event.preventDefault()
-    userLogin({ login, password })
-      .unwrap()
-      .then((payload) => dispatch(authLogin(payload)))
-  }, [userLogin, login, password, dispatch])
+    dispatch(authLogin({ login, password }))
+  }, [login, password, dispatch])
 
   return (
     <DynamicModuleLoader

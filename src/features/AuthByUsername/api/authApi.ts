@@ -7,7 +7,7 @@ export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: unauthorizedQuery,
   endpoints: (builder) => ({
-    login: builder.mutation<Response, loginProps>({
+    login: builder.query<Response, loginProps>({
       query: ({ login, password }) => ({
         url: '',
         method: 'POST',
@@ -20,5 +20,3 @@ export const authApi = createApi({
     }),
   }),
 })
-
-export const { useLoginMutation } = authApi

@@ -1,12 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { Response, ResultStatus, userActions } from 'entities/User'
+import { ResultStatus, userActions } from 'entities/User'
 import { USER_LOCALSTORAGE_KEY } from 'shared/const/localStorage'
 import { loginActions } from 'features/AuthByUsername/model/slice/loginSlice'
+import { authApi } from 'features/AuthByUsername/api/authApi'
+import { loginProps } from 'features/AuthByUsername'
 
-export const authLogin = createAsyncThunk<void, Response>(
+export const authLogin = createAsyncThunk<void, loginProps>(
   'authApi/login',
-  async (response, { dispatch }) => {
-    const data = await response
+  async ({ login, password }, { dispatch }) => {
+    const data = await dispatch(authApi.endpoints.login.initiate({ login, password })).unwrap()
+
     if (data.result === ResultStatus.OK) {
       localStorage.setItem(USER_LOCALSTORAGE_KEY, JSON.stringify(data))
       dispatch(userActions.setAuthData(data))

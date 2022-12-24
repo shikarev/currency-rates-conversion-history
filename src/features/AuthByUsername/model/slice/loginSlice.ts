@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { authApi } from 'features/AuthByUsername/api/authApi'
 import { LoginSchema } from '../types/loginSchema'
 
 const emailRegex = /^[-+\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,30}$/
@@ -8,6 +9,7 @@ const initialState: LoginSchema = {
   login: '',
   password: '',
   isValid: false,
+  isLoading: false,
 }
 
 export const loginSlice = createSlice({
@@ -38,6 +40,29 @@ export const loginSlice = createSlice({
     setError: (state, action: PayloadAction<string>) => {
       state.error = action.payload
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(
+        authApi.endpoints.login.matchPending,
+        (state) => {
+          state.isLoading = true
+          state.error = undefined
+        },
+      )
+      .addMatcher(
+        authApi.endpoints.login.matchFulfilled,
+        (state) => {
+          state.isLoading = false
+        },
+      )
+      .addMatcher(
+        authApi.endpoints.login.matchRejected,
+        (state) => {
+          state.isLoading = false
+          state.error = 'Неизвестная ошибка'
+        },
+      )
   },
 })
 
