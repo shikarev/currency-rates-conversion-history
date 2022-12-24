@@ -6,13 +6,12 @@ import {
 } from '@reduxjs/toolkit'
 import { ExchangeRateSchema } from 'entities/ExchangeRate'
 import { converterSchema } from 'entities/Converter/model/types/converter'
-import { authorizedApi, unauthorizedApi } from 'shared/api/api'
+import { authApi } from 'features/AuthByUsername/api/authApi'
 
 export interface StateSchema {
   user: UserSchema
   converter: converterSchema
-  [unauthorizedApi.reducerPath]: ReturnType<typeof unauthorizedApi.reducer>
-  [authorizedApi.reducerPath]: ReturnType<typeof authorizedApi.reducer>;
+  [authApi.reducerPath]: ReturnType<typeof authApi.reducer>
 
   // Async Reducers
   login?: LoginSchema

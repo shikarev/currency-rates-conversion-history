@@ -4,7 +4,7 @@ import { USER_LOCALSTORAGE_KEY } from 'shared/const/localStorage'
 import { loginActions } from 'features/AuthByUsername/model/slice/loginSlice'
 
 export const authLogin = createAsyncThunk<void, Response>(
-  'auth/login',
+  'authApi/login',
   async (response, { dispatch }) => {
     const data = await response
     if (data.result === ResultStatus.OK) {

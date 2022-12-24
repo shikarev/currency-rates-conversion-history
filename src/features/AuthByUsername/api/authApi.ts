@@ -1,14 +1,13 @@
+import { createApi } from '@reduxjs/toolkit/dist/query/react'
 import { Response } from 'entities/User'
-import { unauthorizedApi } from 'shared/api/api'
+import { unauthorizedQuery } from 'shared/api/api'
+import { loginProps } from '../model/types/loginSchema'
 
-interface loginProps {
-    login: string,
-    password: string
-}
-
-const authApi = unauthorizedApi.injectEndpoints({
-  endpoints: (build) => ({
-    login: build.mutation<Response, loginProps>({
+export const authApi = createApi({
+  reducerPath: 'authApi',
+  baseQuery: unauthorizedQuery,
+  endpoints: (builder) => ({
+    login: builder.mutation<Response, loginProps>({
       query: ({ login, password }) => ({
         url: '',
         method: 'POST',
@@ -22,4 +21,4 @@ const authApi = unauthorizedApi.injectEndpoints({
   }),
 })
 
-export const useLogin = authApi.useLoginMutation
+export const { useLoginMutation } = authApi

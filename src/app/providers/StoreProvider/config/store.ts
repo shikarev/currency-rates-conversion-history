@@ -3,7 +3,7 @@ import {
 } from '@reduxjs/toolkit'
 import { userReducer } from 'entities/User'
 import { converterReducer } from 'entities/Converter'
-import { authorizedApi, unauthorizedApi } from 'shared/api/api'
+import { authApi } from 'features/AuthByUsername/api/authApi'
 import { createReducerManager } from './reducerManager'
 import { StateSchema } from './StateSchema'
 
@@ -15,8 +15,7 @@ export function createReduxStore(
     ...asyncReducers,
     user: userReducer,
     converter: converterReducer,
-    [unauthorizedApi.reducerPath]: unauthorizedApi.reducer,
-    [authorizedApi.reducerPath]: authorizedApi.reducer,
+    [authApi.reducerPath]: authApi.reducer,
   }
 
   const reducerManager = createReducerManager(rootReducers)
@@ -26,7 +25,7 @@ export function createReduxStore(
     devTools: __IS_DEV__,
     preloadedState: initialState,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
-      .concat(unauthorizedApi.middleware, authorizedApi.middleware),
+      .concat(authApi.middleware),
   })
 
   // @ts-ignore

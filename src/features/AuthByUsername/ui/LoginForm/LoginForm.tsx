@@ -4,7 +4,7 @@ import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/Dynamic
 import { FormHelperText, OutlinedInputProps } from '@mui/material'
 import Arrow from 'shared/assets/icons/arrow.svg'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { useLogin } from 'features/AuthByUsername/api/authApi'
+import { useLoginMutation } from 'features/AuthByUsername/api/authApi'
 import { authLogin } from 'features/AuthByUsername/model/services/authLogin/authLogin'
 import {
   ErrorTypographyStyled,
@@ -30,7 +30,7 @@ const initialReducers: ReducersList = {
 }
 
 const LoginForm: React.FC = memo(() => {
-  const [userLogin, { isLoading }] = useLogin()
+  const [userLogin, { isLoading }] = useLoginMutation()
 
   const dispatch = useAppDispatch()
   const login = useSelector(getLoginUsername) || ''
