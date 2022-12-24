@@ -5,8 +5,7 @@ import { FormHelperText, OutlinedInputProps } from '@mui/material'
 import Arrow from 'shared/assets/icons/arrow.svg'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useLogin } from 'features/AuthByUsername/api/authApi'
-import { ResultStatus, userActions } from 'entities/User'
-import { USER_LOCALSTORAGE_KEY } from 'shared/const/localStorage'
+import { authLogin } from 'features/AuthByUsername/model/services/authLogin/authLogin'
 import {
   ErrorTypographyStyled,
   ErrorWrapperStyled,
@@ -47,17 +46,11 @@ const LoginForm: React.FC = memo(() => {
     dispatch(loginActions.setPassword(event.target.value))
   }, [dispatch])
 
-  const onLoginSubmit:React.FormEventHandler = useCallback(async (event) => {
+  const onLoginSubmit:React.FormEventHandler = useCallback((event) => {
     event.preventDefault()
-    const data = await userLogin({ login, password }).unwrap()
-    if (data.result === ResultStatus.OK) {
-      localStorage.setItem(USER_LOCALSTORAGE_KEY, JSON.stringify(data))
-      dispatch(userActions.setAuthData(data))
-    }
-
-    if (data.result === ResultStatus.ERROR) {
-      dispatch(loginActions.setError(data.error || 'Неизвестная ошибка'))
-    }
+    userLogin({ login, password })
+      .unwrap()
+      .then((payload) => dispatch(authLogin(payload)))
   }, [userLogin, login, password, dispatch])
 
   return (
