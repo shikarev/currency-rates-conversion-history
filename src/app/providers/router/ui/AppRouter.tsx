@@ -1,7 +1,7 @@
 import React, { memo, Suspense } from 'react'
 import { useSelector } from 'react-redux'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { APP_ROUTES, routes } from 'shared/config/routeConfig/routeConfig'
+import { APP_ROUTES, routes } from 'shared/config/router/router'
 import { PageLoader } from 'shared/ui/PageLoader/PageLoader'
 import { getUserAuthData } from 'entities/User'
 
