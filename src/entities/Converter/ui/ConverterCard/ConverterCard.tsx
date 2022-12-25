@@ -1,30 +1,35 @@
-import {
-  Box, Button, FormControl, FormHelperText, MenuItem, OutlinedInput, Select, SelectChangeEvent, Typography,
-} from '@mui/material'
-import { classNames } from 'shared/lib/classNames/classNames'
+import { FormHelperText, MenuItem, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { getCurrencyPairList } from 'entities/ExchangeRate/model/selectors/getCurrencyPairList/getCurrencyPairList'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
-import {
-  ChangeEvent, FormEvent, useCallback, useEffect,
-} from 'react'
+import React, { ChangeEvent, useCallback, useEffect } from 'react'
 import { converterActions } from 'entities/Converter'
 import SelectArrow from 'shared/assets/icons/select-arrow-down.svg'
+import { SelectInputProps } from '@mui/material/Select/SelectInput'
+import {
+  AmountFormControlStyled,
+  AmountOutlinedInputStyled,
+  AssetFromFormControlStyled,
+  AssetToFormControlStyled,
+  ConverterBottomStyled,
+  ConverterCardFormStyled,
+  ConverterTopStyled,
+  ConverterWrapperStyled,
+  MainBorderStyled,
+  SelectStyled,
+  TitleContainerStyled,
+  TitleStyled,
+  TotalFormHelperText,
+  TotalSubmitButton,
+} from './ConverterCard.styled'
 import { getAmount } from '../../model/selectors/getAmount/getAmount'
 import { getAssetFrom } from '../../model/selectors/getAssetFrom/getAssetFrom'
 import { getAssetTo } from '../../model/selectors/getAssetTo/getAssetTo'
 import { getTotal } from '../../model/selectors/getTotal/getTotal'
 import { getToAssetsList } from '../../model/selectors/getToAssetsList/getToAssetsList'
 import { getFromAssetsList } from '../../model/selectors/getFromAssetsList/getFromAssetsList'
-import cls from './ConverterCard.module.scss'
 
-interface ConverterCardProps {
-  className?: string
-}
-
-const ConverterCard = (props: ConverterCardProps) => {
-  const { className } = props
-
+const ConverterCard = () => {
   const update = useSelector(getCurrencyPairList)
   const dispatch = useAppDispatch()
 
@@ -35,7 +40,7 @@ const ConverterCard = (props: ConverterCardProps) => {
   const fromAssetsList = useSelector(getFromAssetsList)
   const toAssetsList = useSelector(getToAssetsList)
 
-  const handleTotal = (event: FormEvent) => {
+  const handleTotal: React.FormEventHandler = (event) => {
     event.preventDefault()
     const result = `${assetFrom}/${assetTo}`
     const quotes = update?.find((x) => x.asset === result)?.quote
@@ -49,19 +54,18 @@ const ConverterCard = (props: ConverterCardProps) => {
     dispatch(converterActions.setCurrency(value))
   }, [dispatch])
 
-  const onChangeFirstPair = useCallback((event: SelectChangeEvent) => {
+  const onChangeFirstPair: SelectInputProps['onChange'] = useCallback((event) => {
     if (update) {
       const newItem = update.map((item) => (
         item.asset
       )).filter((item) => item.includes(`${event.target.value}/`))
-      console.log(newItem)
 
       dispatch(converterActions.getAsset(newItem))
       dispatch(converterActions.setFirst(event.target.value))
     }
   }, [dispatch, update])
 
-  const onChangeAssetTo = useCallback((event: SelectChangeEvent) => {
+  const onChangeAssetTo: SelectInputProps['onChange'] = useCallback((event) => {
     dispatch(converterActions.setAssetTo(event.target.value))
   }, [dispatch])
 
@@ -72,134 +76,71 @@ const ConverterCard = (props: ConverterCardProps) => {
   }, [dispatch, update])
 
   return (
-    <form className={classNames(cls.ConverterCard, {}, [className])} onSubmit={handleTotal}>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'primary.main',
-          height: '60px',
-          borderTopRightRadius: '20px',
-        }}
-      >
-        <Typography sx={{ color: '#FFFFFF', fontSize: '16px' }}>Конвертация валют</Typography>
-      </Box>
-      <Box
-        sx={{
-          border: '1px solid',
-          borderColor: 'primary.main',
-          borderTop: 0,
-          borderBottomRightRadius: '20px',
-          borderBottomLeftRadius: '20px',
-          height: '300px',
-          p: '10px',
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            height: '130px',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderBottom: '1px solid #E1E1E1',
-          }}
-        >
-          <Box sx={{ display: 'flex', height: '60px', alignItems: 'flex-end' }}>
-            <FormControl sx={{ mr: '20px', width: '80px' }} variant="outlined">
-              <FormHelperText sx={{ fontSize: '14px', color: '#000000', mb: '2px' }}>Сумма</FormHelperText>
-              <OutlinedInput
+    <ConverterCardFormStyled onSubmit={handleTotal}>
+      <TitleContainerStyled>
+        <TitleStyled>Конвертация валют</TitleStyled>
+      </TitleContainerStyled>
+
+      <MainBorderStyled>
+        <ConverterTopStyled>
+          <ConverterWrapperStyled>
+            <AmountFormControlStyled variant="outlined">
+              <FormHelperText>Сумма</FormHelperText>
+              <AmountOutlinedInputStyled
                 value={amount}
                 onChange={onChangeConverter}
-                sx={{
-                  borderRadius: '5px',
-                  fontSize: '16px',
-                  '& .MuiOutlinedInput-input': {
-                    p: '10px',
-                  },
-                }}
               />
-            </FormControl>
+            </AmountFormControlStyled>
 
-            <FormControl sx={{ width: '80px', mr: '5px' }} variant="outlined">
-              <Select
+            <AssetFromFormControlStyled variant="outlined">
+              <SelectStyled
                 value={assetFrom}
                 onChange={onChangeFirstPair}
                 IconComponent={SelectArrow}
-                sx={{
-                  borderRadius: '5px',
-                  fontSize: '16px',
-                  height: '43px',
-                  '& .MuiSelect-icon': {
-                    top: 'calc(50% - 2px)',
-                    right: '10px',
-                  },
-                  '& .MuiOutlinedInput-input': {
-                    p: '10px',
-                  },
-                }}
               >
                 {fromAssetsList.map((item) => (
                   <MenuItem key={item} value={item}>{item}</MenuItem>
                 ))}
-              </Select>
-            </FormControl>
+              </SelectStyled>
+            </AssetFromFormControlStyled>
 
-            <FormControl sx={{ width: '80px', mr: '20px' }} variant="outlined">
-              <Select
+            <AssetToFormControlStyled variant="outlined">
+              <SelectStyled
                 value={assetTo}
                 onChange={onChangeAssetTo}
                 IconComponent={SelectArrow}
                 displayEmpty
-                sx={{
-                  borderRadius: '5px',
-                  fontSize: '16px',
-                  height: '43px',
-                  '& .MuiSelect-icon': {
-                    top: 'calc(50% - 2px)',
-                    right: '10px',
-                  },
-                  '& .MuiOutlinedInput-input': {
-                    p: '10px',
-                  },
-                }}
               >
                 {toAssetsList.map((item) => (
                   <MenuItem key={item} value={item}>{item}</MenuItem>
                 ))}
-              </Select>
-            </FormControl>
-            <Button
+              </SelectStyled>
+            </AssetToFormControlStyled>
+
+            <TotalSubmitButton
               color="primary"
               variant="contained"
-              sx={{ width: '150px' }}
               type="submit"
             >
               Расчитать
-            </Button>
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            height: '150px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Box sx={{ width: '435px' }}>
-            {total
-              ? (
-                <Box>
-                  <FormHelperText sx={{ fontSize: '14px', color: '#000000', mb: '2px' }}>Итого</FormHelperText>
-                  <Typography>{total}</Typography>
-                </Box>
-              )
-              : null}
-          </Box>
-        </Box>
-      </Box>
-    </form>
+            </TotalSubmitButton>
+          </ConverterWrapperStyled>
+        </ConverterTopStyled>
+
+        <ConverterBottomStyled>
+          {total ? (
+            <>
+              <TotalFormHelperText>
+                Итого
+              </TotalFormHelperText>
+              <Typography>
+                {total}
+              </Typography>
+            </>
+          ) : null}
+        </ConverterBottomStyled>
+      </MainBorderStyled>
+    </ConverterCardFormStyled>
   )
 }
 
