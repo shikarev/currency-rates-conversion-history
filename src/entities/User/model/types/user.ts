@@ -1,10 +1,10 @@
-export enum ResultStatus {
+export enum RESULT_STATUS {
   OK = 'ok',
   ERROR = 'error',
 }
 
 export interface UserResponse {
-  result: ResultStatus
+  result: RESULT_STATUS
   error?: string | undefined
 }
 

@@ -7,22 +7,22 @@ type AppRouteProps = RouteProps & {
   path: string
 }
 
-export enum AppRoutes {
+export enum APP_ROUTES {
   MAIN = 'main',
   LOGIN = 'login',
   NOT_FOUND = 'not_found'
 }
 
-export const routes: Record<AppRoutes, AppRouteProps> = {
-  [AppRoutes.MAIN]: {
+export const routes: Record<APP_ROUTES, AppRouteProps> = {
+  [APP_ROUTES.MAIN]: {
     path: '/main',
     element: <MainPage />,
   },
-  [AppRoutes.LOGIN]: {
+  [APP_ROUTES.LOGIN]: {
     path: '/login',
     element: <LoginPage />,
   },
-  [AppRoutes.NOT_FOUND]: {
+  [APP_ROUTES.NOT_FOUND]: {
     path: '*',
     element: <NotFoundPage />,
   },

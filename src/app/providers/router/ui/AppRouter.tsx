@@ -1,7 +1,7 @@
 import React, { memo, Suspense } from 'react'
 import { useSelector } from 'react-redux'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { AppRoutes, routes } from 'shared/config/routeConfig/routeConfig'
+import { APP_ROUTES, routes } from 'shared/config/routeConfig/routeConfig'
 import { PageLoader } from 'shared/ui/PageLoader/PageLoader'
 import { getUserAuthData } from 'entities/User'
 
@@ -13,13 +13,13 @@ const AppRouter = () => {
       <Routes>
         {authData ? (
           <>
-            <Route path={routes[AppRoutes.MAIN].path} element={routes.main.element} />
-            <Route path="*" element={<Navigate to={routes[AppRoutes.MAIN].path} replace />} />
+            <Route path={routes[APP_ROUTES.MAIN].path} element={routes.main.element} />
+            <Route path="*" element={<Navigate to={routes[APP_ROUTES.MAIN].path} replace />} />
           </>
         ) : (
           <>
-            <Route path={routes[AppRoutes.LOGIN].path} element={routes.login.element} />
-            <Route path="*" element={<Navigate to={routes[AppRoutes.LOGIN].path} replace />} />
+            <Route path={routes[APP_ROUTES.LOGIN].path} element={routes.login.element} />
+            <Route path="*" element={<Navigate to={routes[APP_ROUTES.LOGIN].path} replace />} />
           </>
         )}
       </Routes>
