@@ -21,10 +21,6 @@ import { getLoginError } from '../../model/selectors/getLoginError/getLoginError
 import { getLoginIsValid } from '../../model/selectors/getLoginIsValid/getLoginIsValid'
 import { getLoginIsLoading } from '../../model/selectors/getLoginIsLoading/getLoginIsLoading'
 
-export interface LoginFormProps {
-  className?: string
-}
-
 const initialReducers: ReducersList = {
   login: loginReducer,
 }

@@ -1,10 +1,10 @@
 import { Typography } from '@mui/material'
-import { Suspense } from 'react'
+import React, { memo, Suspense } from 'react'
 import { Loader } from 'shared/ui/Loader/Loader'
 import { ContentBoxStyled, TitleBoxStyled, WidgetBoxStyled } from './LoginWidget.styled'
 import { LoginFormAsync } from '../LoginForm/LoginForm.async'
 
-const LoginWidget = () => (
+const LoginWidget: React.FC = memo(() => (
   <WidgetBoxStyled>
     <TitleBoxStyled>
       <Typography variant="h5" noWrap>
@@ -18,6 +18,6 @@ const LoginWidget = () => (
       </Suspense>
     </ContentBoxStyled>
   </WidgetBoxStyled>
-)
+))
 
 export { LoginWidget }
