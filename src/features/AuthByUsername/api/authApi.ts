@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/dist/query/react'
-import { Response } from 'entities/User'
+import { UserResponse } from 'entities/User'
 import { unauthorizedQuery } from 'shared/api/api'
 import { loginProps } from '../model/types/loginSchema'
 
@@ -7,7 +7,7 @@ export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: unauthorizedQuery,
   endpoints: (builder) => ({
-    login: builder.query<Response, loginProps>({
+    login: builder.query<UserResponse, loginProps>({
       query: ({ login, password }) => ({
         url: '',
         method: 'POST',

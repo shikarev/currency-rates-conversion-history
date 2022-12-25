@@ -3,12 +3,11 @@ export enum ResultStatus {
   ERROR = 'error',
 }
 
-export interface Response {
+export interface UserResponse {
   result: ResultStatus
   error?: string | undefined
 }
 
 export interface UserSchema {
-  authData?: Response
-  initialized: boolean;
+  authData?: UserResponse
 }

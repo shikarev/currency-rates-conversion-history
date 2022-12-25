@@ -1,26 +1,18 @@
-import React, { Suspense, useEffect } from 'react'
+import React, { Suspense } from 'react'
 import { classNames } from 'shared/lib/classNames/classNames'
 import { AppRouter } from 'app/providers/router'
 import { Navbar } from 'widgets/Navbar'
-import { useDispatch, useSelector } from 'react-redux'
-import { userActions } from 'entities/User'
 import { Loader } from 'shared/ui/Loader/Loader'
-import { getUserInitialized } from 'entities/User/model/selectors/getUserInitialized/getUserInitialized'
+import SessionCheck from 'entities/User/ui/SessionCheck/SessionCheck'
 
 function App() {
-  const dispatch = useDispatch()
-  const userInitialized = useSelector(getUserInitialized)
-
-  useEffect(() => {
-    dispatch(userActions.initAuthData())
-  }, [dispatch])
-
   return (
     <div className={classNames('app', {})}>
       <Suspense fallback={<Loader />}>
+        <SessionCheck />
         <Navbar />
         <div className="content-page">
-          {userInitialized ? <AppRouter /> : null }
+          <AppRouter />
         </div>
       </Suspense>
     </div>
