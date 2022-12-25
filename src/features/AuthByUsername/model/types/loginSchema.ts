@@ -6,7 +6,7 @@ export interface LoginSchema {
   isValid?: boolean
 }
 
-export interface loginProps {
+export interface LoginProps {
   login: string,
   password: string
 }

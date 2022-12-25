@@ -1,4 +1,4 @@
-import { loginProps, LoginSchema } from './model/types/loginSchema'
+import { LoginProps, LoginSchema } from './model/types/loginSchema'
 import { LoginWidget } from './ui/LoginWidget/LoginWidget'
 
-export { LoginWidget, LoginSchema, loginProps }
+export { LoginWidget, LoginSchema, LoginProps }

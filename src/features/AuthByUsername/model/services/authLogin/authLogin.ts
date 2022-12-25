@@ -3,9 +3,9 @@ import { ResultStatus, userActions } from 'entities/User'
 import { USER_LOCALSTORAGE_KEY } from 'shared/const/localStorage'
 import { loginActions } from 'features/AuthByUsername/model/slice/loginSlice'
 import { authApi } from 'features/AuthByUsername/api/authApi'
-import { loginProps } from 'features/AuthByUsername'
+import { LoginProps } from 'features/AuthByUsername'
 
-export const authLogin = createAsyncThunk<void, loginProps>(
+export const authLogin = createAsyncThunk<void, LoginProps>(
   'authApi/login',
   async ({ login, password }, { dispatch }) => {
     const data = await dispatch(authApi.endpoints.login.initiate({ login, password })).unwrap()
