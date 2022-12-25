@@ -16,7 +16,7 @@ export const authLogin = createAsyncThunk<void, loginProps>(
     }
 
     if (data.result === ResultStatus.ERROR) {
-      dispatch(loginActions.setError(data.error || 'Неизвестная ошибка'))
+      dispatch(loginActions.setError(data.error ?? 'Неизвестная ошибка'))
     }
   },
 )
