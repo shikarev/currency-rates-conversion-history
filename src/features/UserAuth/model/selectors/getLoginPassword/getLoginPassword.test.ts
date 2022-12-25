@@ -1,5 +1,5 @@
 import { StateSchema } from 'app/providers/StoreProvider'
-import { passwordRegex } from 'features/AuthByUsername/model/slice/loginSlice'
+import { passwordRegex } from 'features/UserAuth/model/slice/loginSlice'
 import { getLoginPassword } from './getLoginPassword'
 
 describe('getLoginPassword.test', () => {

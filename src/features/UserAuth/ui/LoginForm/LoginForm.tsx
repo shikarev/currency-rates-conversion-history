@@ -4,7 +4,7 @@ import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/Dynamic
 import { FormHelperText, OutlinedInputProps } from '@mui/material'
 import Arrow from 'shared/assets/icons/arrow.svg'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { authLogin } from 'features/AuthByUsername/model/services/authLogin/authLogin'
+import { authLogin } from 'features/UserAuth/model/services/authLogin/authLogin'
 import {
   ErrorTypographyStyled,
   ErrorWrapperStyled,
