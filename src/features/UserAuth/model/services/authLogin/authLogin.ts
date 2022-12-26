@@ -5,7 +5,7 @@ import { loginActions } from 'features/UserAuth/model/slice/loginSlice'
 import { LoginProps, authApi } from 'features/UserAuth'
 
 export const authLogin = createAsyncThunk<void, LoginProps>(
-  'authApi/login',
+  'auth/login',
   async ({ login, password }, { dispatch }) => {
     const data = await dispatch(authApi.endpoints.login.initiate({ login, password })).unwrap()
 
