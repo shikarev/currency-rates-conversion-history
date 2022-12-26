@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/dist/query/react'
 import { UserResponse } from 'entities/User'
 import { unauthorizedQuery } from 'shared/api/api'
-import { LoginProps } from '../model/types/loginSchema'
+import { LoginProps } from 'features/UserAuth'
 
 export const authApi = createApi({
   reducerPath: 'authApi',

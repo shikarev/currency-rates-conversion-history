@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { authApi } from 'features/UserAuth/api/authApi'
-import { LoginSchema } from '../types/loginSchema'
+import { authApi, LoginSchema } from 'features/UserAuth'
 
 const emailRegex = /^[-+\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,30}$/
 export const passwordRegex = /(?=[\w]+$)(?=.{7,}).*$/

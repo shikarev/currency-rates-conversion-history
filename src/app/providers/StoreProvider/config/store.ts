@@ -3,7 +3,7 @@ import {
 } from '@reduxjs/toolkit'
 import { userReducer } from 'entities/User'
 import { converterReducer } from 'entities/Converter'
-import { authApi } from 'features/UserAuth/api/authApi'
+import { authApi } from 'features/UserAuth'
 import { createReducerManager } from './reducerManager'
 import { StateSchema } from './StateSchema'
 

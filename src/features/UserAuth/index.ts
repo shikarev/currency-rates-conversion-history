@@ -1,4 +1,7 @@
+import { authApi } from './api/authApi'
 import { LoginProps, LoginSchema } from './model/types/loginSchema'
 import { LoginWidget } from './ui/LoginWidget/LoginWidget'
 
-export { LoginWidget, LoginSchema, LoginProps }
+export {
+  authApi, LoginWidget, LoginSchema, LoginProps,
+}

@@ -1,12 +1,11 @@
 import { UserSchema } from 'entities/User'
-import { LoginSchema } from 'features/UserAuth'
+import { authApi, LoginSchema } from 'features/UserAuth'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import {
   AnyAction, CombinedState, Reducer, ReducersMapObject,
 } from '@reduxjs/toolkit'
 import { ExchangeRateSchema } from 'entities/ExchangeRate'
 import { converterSchema } from 'entities/Converter/model/types/converter'
-import { authApi } from 'features/UserAuth/api/authApi'
 
 export interface StateSchema {
   user: UserSchema
