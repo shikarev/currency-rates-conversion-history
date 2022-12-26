@@ -1,10 +1,9 @@
-import { LoginModal } from 'features/AuthByUsername'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { classNames } from 'shared/lib/classNames/classNames'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserAuthData, userActions } from 'entities/User'
-import { Button } from '@mui/material'
-import Arrow from 'shared/assets/icons/arrow.svg'
+import { USER_LOCALSTORAGE_KEY } from 'shared/const/localStorage'
+import { LogoutButtonStyled } from 'widgets/Navbar/ui/Navbar.styled'
 import cls from './Navbar.module.scss'
 
 interface NavbarProps {
@@ -12,55 +11,29 @@ interface NavbarProps {
 }
 
 const Navbar = ({ className }: NavbarProps) => {
-  const [isAuthModal, setIsAuthModal] = useState(false)
   const authData = useSelector(getUserAuthData)
 
   const dispatch = useDispatch()
 
-  const onCloseModal = useCallback(() => {
-    setIsAuthModal(false)
-  }, [])
-
-  const onShowModal = useCallback(() => {
-    setIsAuthModal(true)
-  }, [])
-
-  const onLogout = useCallback(() => {
-    dispatch(userActions.logout())
+  const onLogout = useCallback(async () => {
+    await dispatch(userActions.logout())
+    localStorage.removeItem(USER_LOCALSTORAGE_KEY)
   }, [dispatch])
 
-  if (authData) {
-    return (
-      <div className={classNames(cls.Navbar, {}, [className])}>
-        <Button
-          color="primary"
-          variant="outlined"
-          sx={{ width: '130px' }}
-          disableRipple
-          onClick={onLogout}
-        >
-          Выход
-        </Button>
-      </div>
-    )
+  if (!authData) {
+    return null
   }
 
   return (
     <div className={classNames(cls.Navbar, {}, [className])}>
-      <Button
+      <LogoutButtonStyled
         color="primary"
-        variant="contained"
-        sx={{ width: '130px', '& span': { ml: '6px' } }}
+        variant="outlined"
         disableRipple
-        onClick={onShowModal}
+        onClick={onLogout}
       >
-        Войти
-        {' '}
-        <span><Arrow /></span>
-      </Button>
-      {isAuthModal
-        ? <LoginModal isOpen={isAuthModal} onClose={onCloseModal} />
-        : null}
+        Выход
+      </LogoutButtonStyled>
     </div>
   )
 }

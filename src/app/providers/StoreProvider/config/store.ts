@@ -3,6 +3,7 @@ import {
 } from '@reduxjs/toolkit'
 import { userReducer } from 'entities/User'
 import { converterReducer } from 'entities/Converter'
+import { authApi } from 'features/UserAuth'
 import { createReducerManager } from './reducerManager'
 import { StateSchema } from './StateSchema'
 
@@ -14,14 +15,17 @@ export function createReduxStore(
     ...asyncReducers,
     user: userReducer,
     converter: converterReducer,
+    [authApi.reducerPath]: authApi.reducer,
   }
 
   const reducerManager = createReducerManager(rootReducers)
 
-  const store = configureStore<StateSchema>({
+  const store = configureStore({
     reducer: reducerManager.reduce as Reducer<CombinedState<StateSchema>>,
     devTools: __IS_DEV__,
     preloadedState: initialState,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+      .concat(authApi.middleware),
   })
 
   // @ts-ignore

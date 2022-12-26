@@ -1,5 +1,5 @@
 import { UserSchema } from 'entities/User'
-import { LoginSchema } from 'features/AuthByUsername'
+import { authApi, LoginSchema } from 'features/UserAuth'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import {
   AnyAction, CombinedState, Reducer, ReducersMapObject,
@@ -10,9 +10,10 @@ import { converterSchema } from 'entities/Converter/model/types/converter'
 export interface StateSchema {
   user: UserSchema
   converter: converterSchema
+  [authApi.reducerPath]: ReturnType<typeof authApi.reducer>
 
   // Async Reducers
-  loginForm?: LoginSchema
+  login?: LoginSchema
   exchangeRate?: ExchangeRateSchema
   historyQuotes?: any
 }
