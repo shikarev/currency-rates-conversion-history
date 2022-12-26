@@ -27,8 +27,8 @@ const initialReducers: ReducersList = {
 
 const LoginForm: React.FC = memo(() => {
   const dispatch = useAppDispatch()
-  const login = useSelector(getLoginUsername) || ''
-  const password = useSelector(getLoginPassword) || ''
+  const login = useSelector(getLoginUsername) ?? ''
+  const password = useSelector(getLoginPassword) ?? ''
   const isLoading = useSelector(getLoginIsLoading)
   const error = useSelector(getLoginError)
   const isValid = useSelector(getLoginIsValid)
