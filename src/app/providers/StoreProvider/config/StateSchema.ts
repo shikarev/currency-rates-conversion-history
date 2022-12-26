@@ -30,3 +30,8 @@ export interface ReducerManager {
 export interface ReduxStoreWithManager extends ToolkitStore<StateSchema> {
   reducerManager: ReducerManager
 }
+
+export interface ThunkConfig<T> {
+  rejectValue: T;
+  state: StateSchema;
+}

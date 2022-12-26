@@ -1,11 +1,15 @@
-import { FormHelperText, MenuItem, Typography } from '@mui/material'
+import {
+  FormHelperText, MenuItem, OutlinedInputProps, Typography,
+} from '@mui/material'
 import { useSelector } from 'react-redux'
 import { getCurrencyPairList } from 'entities/ExchangeRate/model/selectors/getCurrencyPairList/getCurrencyPairList'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
-import React, { ChangeEvent, useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { converterActions } from 'entities/Converter'
 import SelectArrow from 'shared/assets/icons/select-arrow-down.svg'
 import { SelectInputProps } from '@mui/material/Select/SelectInput'
+import { defaultAssets } from 'entities/Converter/model/services/defaultAssets/defaultAssets'
+import { changeFromAsset } from 'entities/Converter/model/services/changeFromAsset/changeFromAsset'
 import {
   AmountFormControlStyled,
   AmountOutlinedInputStyled,
@@ -21,6 +25,7 @@ import {
   TitleStyled,
   TotalFormHelperText,
   TotalSubmitButton,
+  TotalWrapper,
 } from './ConverterCard.styled'
 import { getAmount } from '../../model/selectors/getAmount/getAmount'
 import { getAssetFrom } from '../../model/selectors/getAssetFrom/getAssetFrom'
@@ -42,26 +47,16 @@ const ConverterCard = () => {
 
   const handleTotal: React.FormEventHandler = (event) => {
     event.preventDefault()
-    const result = `${assetFrom}/${assetTo}`
-    const quotes = update?.find((x) => x.asset === result)?.quote
-
-    const finish = Number(amount) * Number(quotes)
-    dispatch(converterActions.setTotal(String(finish.toFixed(4))))
   }
 
-  const onChangeConverter = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+  const onChangeConverter: OutlinedInputProps['onChange'] = useCallback((event) => {
     const value = event.target.value.replace(/\D/g, '')
     dispatch(converterActions.setCurrency(value))
   }, [dispatch])
 
-  const onChangeFirstPair: SelectInputProps['onChange'] = useCallback((event) => {
+  const onChangeFromAsset: SelectInputProps['onChange'] = useCallback((event) => {
     if (update) {
-      const newItem = update.map((item) => (
-        item.asset
-      )).filter((item) => item.includes(`${event.target.value}/`))
-
-      dispatch(converterActions.getAsset(newItem))
-      dispatch(converterActions.setFirst(event.target.value))
+      dispatch(changeFromAsset({ currentAssets: update, fromAsset: event.target.value }))
     }
   }, [dispatch, update])
 
@@ -71,7 +66,7 @@ const ConverterCard = () => {
 
   useEffect(() => {
     if (update) {
-      dispatch(converterActions.setDefaultAssets(update))
+      dispatch(defaultAssets(update))
     }
   }, [dispatch, update])
 
@@ -95,7 +90,7 @@ const ConverterCard = () => {
             <AssetFromFormControlStyled variant="outlined">
               <SelectStyled
                 value={assetFrom}
-                onChange={onChangeFirstPair}
+                onChange={onChangeFromAsset}
                 IconComponent={SelectArrow}
               >
                 {fromAssetsList.map((item) => (
@@ -129,14 +124,14 @@ const ConverterCard = () => {
 
         <ConverterBottomStyled>
           {total ? (
-            <>
+            <TotalWrapper>
               <TotalFormHelperText>
                 Итого
               </TotalFormHelperText>
               <Typography>
                 {total}
               </Typography>
-            </>
+            </TotalWrapper>
           ) : null}
         </ConverterBottomStyled>
       </MainBorderStyled>

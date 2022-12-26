@@ -93,7 +93,6 @@ export const TotalSubmitButton = styled(Button)({
 
 export const ConverterBottomStyled = styled(Box)({
   height: '150px',
-  width: '435px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -103,4 +102,8 @@ export const TotalFormHelperText = styled(FormHelperText)({
   fontSize: '14px',
   color: '#000000',
   marginBottom: '2px',
+})
+
+export const TotalWrapper = styled(Box)({
+  width: '435px',
 })
