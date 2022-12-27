@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CurrencyPair } from 'entities/ExchangeRate/model/types/exchangeRate'
+import _ from 'lodash'
 import { ConverterSchema } from '../types/converter'
 
 const initialState: ConverterSchema = {
@@ -33,7 +34,7 @@ export const converterSlice = createSlice({
     },
 
     setDefaultAsset: (state, action: PayloadAction<CurrencyPair[]>) => {
-      const assets = action.payload.map((item) => item.asset)
+      const assets = _.map(action.payload, 'asset')
 
       const [assetFrom, assetTo] = assets[0].split('/')
       const fromAssets = assets.map((item) => item.split('/')[0])
@@ -41,10 +42,12 @@ export const converterSlice = createSlice({
       state.assetFrom = assetFrom
       state.assetTo = assetTo
 
-      const fromAssetsList = fromAssets.filter((element, index) => fromAssets.indexOf(element) === index)
-      const toAssetsList = assets.filter((item) => item.includes(`${assetFrom}/`)).map((item) => (
-        item.split('/')[1]
-      ))
+      const fromAssetsList = _.uniq(fromAssets)
+
+      const toAssetsList = assets.filter((item) => item.includes(`${assetFrom}/`))
+        .map((item) => (
+          item.split('/')[1]
+        ))
 
       state.fromAssetsList = fromAssetsList
       state.toAssetsList = toAssetsList
