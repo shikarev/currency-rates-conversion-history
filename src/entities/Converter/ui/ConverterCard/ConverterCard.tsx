@@ -8,7 +8,6 @@ import React, { useCallback, useEffect } from 'react'
 import { converterActions } from 'entities/Converter'
 import SelectArrow from 'shared/assets/icons/select-arrow-down.svg'
 import { SelectInputProps } from '@mui/material/Select/SelectInput'
-import { changeFromAsset } from 'entities/Converter/model/services/changeFromAsset/changeFromAsset'
 import {
   AmountFormControlStyled,
   AmountOutlinedInputStyled,
@@ -34,7 +33,7 @@ import { getToAssetsList } from '../../model/selectors/getToAssetsList/getToAsse
 import { getFromAssetsList } from '../../model/selectors/getFromAssetsList/getFromAssetsList'
 
 const ConverterCard = () => {
-  const update = useSelector(getCurrencyPairList)
+  const currencyPairList = useSelector(getCurrencyPairList)
   const dispatch = useAppDispatch()
 
   const amount = useSelector(getAmount)
@@ -48,26 +47,29 @@ const ConverterCard = () => {
     event.preventDefault()
   }
 
+  const onConverterStart = useCallback(async () => {
+    if (currencyPairList) {
+      await dispatch(converterActions.setCurrencyPairList(currencyPairList))
+      dispatch(converterActions.setDefaultAsset())
+    }
+  }, [dispatch, currencyPairList])
+
   const onChangeAmount: OutlinedInputProps['onChange'] = useCallback((event) => {
     const value = event.target.value.replace(/\D/g, '')
     dispatch(converterActions.setAmount(value))
   }, [dispatch])
 
   const onChangeFromAsset: SelectInputProps['onChange'] = useCallback((event) => {
-    if (update) {
-      dispatch(changeFromAsset({ currentAssets: update, fromAsset: event.target.value }))
-    }
-  }, [dispatch, update])
+    dispatch(converterActions.setChangeFromAsset(event.target.value))
+  }, [dispatch])
 
   const onChangeAssetTo: SelectInputProps['onChange'] = useCallback((event) => {
     dispatch(converterActions.setAssetTo(event.target.value))
   }, [dispatch])
 
   useEffect(() => {
-    if (update) {
-      dispatch(converterActions.setDefaultAsset(update))
-    }
-  }, [dispatch, update])
+    onConverterStart()
+  }, [dispatch, onConverterStart, currencyPairList])
 
   return (
     <ConverterCardFormStyled onSubmit={handleSubmit}>
