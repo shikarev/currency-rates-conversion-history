@@ -6,6 +6,8 @@ declare module '*.scss' {
   export = classNames
 }
 
+declare module 'lodash'
+
 declare module '*.png'
 
 declare module '*.jpg'

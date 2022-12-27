@@ -37,15 +37,15 @@ export const converterSlice = createSlice({
       const assets = _.map(action.payload, 'asset')
 
       const [assetFrom, assetTo] = assets[0].split('/')
-      const fromAssets = assets.map((item) => item.split('/')[0])
+      const fromAssets = assets.map((item: string) => item.split('/')[0])
 
       state.assetFrom = assetFrom
       state.assetTo = assetTo
 
       const fromAssetsList = _.uniq(fromAssets)
 
-      const toAssetsList = assets.filter((item) => item.includes(`${assetFrom}/`))
-        .map((item) => (
+      const toAssetsList = assets.filter((item: string) => item.includes(`${assetFrom}/`))
+        .map((item: string) => (
           item.split('/')[1]
         ))
 
