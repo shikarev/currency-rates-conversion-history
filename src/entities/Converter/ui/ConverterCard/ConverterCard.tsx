@@ -44,13 +44,13 @@ const ConverterCard = () => {
   const fromAssetsList = useSelector(getFromAssetsList)
   const toAssetsList = useSelector(getToAssetsList)
 
-  const handleTotal: React.FormEventHandler = (event) => {
+  const handleSubmit: React.FormEventHandler = (event) => {
     event.preventDefault()
   }
 
-  const onChangeConverter: OutlinedInputProps['onChange'] = useCallback((event) => {
+  const onChangeAmount: OutlinedInputProps['onChange'] = useCallback((event) => {
     const value = event.target.value.replace(/\D/g, '')
-    dispatch(converterActions.setCurrency(value))
+    dispatch(converterActions.setAmount(value))
   }, [dispatch])
 
   const onChangeFromAsset: SelectInputProps['onChange'] = useCallback((event) => {
@@ -70,7 +70,7 @@ const ConverterCard = () => {
   }, [dispatch, update])
 
   return (
-    <ConverterCardFormStyled onSubmit={handleTotal}>
+    <ConverterCardFormStyled onSubmit={handleSubmit}>
       <TitleContainerStyled>
         <TitleStyled>Конвертация валют</TitleStyled>
       </TitleContainerStyled>
@@ -82,7 +82,7 @@ const ConverterCard = () => {
               <FormHelperText>Сумма</FormHelperText>
               <AmountOutlinedInputStyled
                 value={amount}
-                onChange={onChangeConverter}
+                onChange={onChangeAmount}
               />
             </AmountFormControlStyled>
 
@@ -122,7 +122,7 @@ const ConverterCard = () => {
         </ConverterTopStyled>
 
         <ConverterBottomStyled>
-          {total ? (
+          {!total ? null : (
             <TotalWrapper>
               <TotalFormHelperText>
                 Итого
@@ -131,7 +131,7 @@ const ConverterCard = () => {
                 {total}
               </Typography>
             </TotalWrapper>
-          ) : null}
+          )}
         </ConverterBottomStyled>
       </MainBorderStyled>
     </ConverterCardFormStyled>

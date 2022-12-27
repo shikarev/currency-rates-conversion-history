@@ -17,7 +17,7 @@ export const converterSlice = createSlice({
   name: 'converter',
   initialState,
   reducers: {
-    setCurrency: (state, action: PayloadAction<string>) => {
+    setAmount: (state, action: PayloadAction<string>) => {
       state.amount = action.payload
     },
 
