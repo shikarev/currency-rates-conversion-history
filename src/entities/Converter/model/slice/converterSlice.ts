@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CurrencyPair } from 'entities/ExchangeRate/model/types/exchangeRate'
-import _ from 'lodash'
+import uniq from 'lodash/uniq'
+import map from 'lodash/map'
 import { ConverterSchema } from '../types/converter'
 
 const initialState: ConverterSchema = {
@@ -12,6 +13,14 @@ const initialState: ConverterSchema = {
   toAssetsList: [],
   isLoading: false,
   total: '',
+}
+
+function splittedMap(array: any[], includes: any, split: number) {
+  const result = array.filter((item: string) => item.includes(`${includes}/`))
+    .map((item: string) => (
+      item.split('/')[split]
+    ))
+  return result
 }
 
 export const converterSlice = createSlice({
@@ -39,7 +48,7 @@ export const converterSlice = createSlice({
     },
 
     setDefaultAsset: (state) => {
-      const assets = _.map(state.currencyPairList, 'asset')
+      const assets = map(state.currencyPairList, 'asset')
 
       const [assetFrom, assetTo] = assets[0].split('/')
       const fromAssets = assets.map((item: string) => item.split('/')[0])
@@ -47,12 +56,9 @@ export const converterSlice = createSlice({
       state.assetFrom = assetFrom
       state.assetTo = assetTo
 
-      const fromAssetsList = _.uniq(fromAssets)
+      const fromAssetsList = uniq(fromAssets)
 
-      const toAssetsList = assets.filter((item: string) => item.includes(`${assetFrom}/`))
-        .map((item: string) => (
-          item.split('/')[1]
-        ))
+      const toAssetsList = splittedMap(assets, assetFrom, 1)
 
       state.fromAssetsList = fromAssetsList
       state.toAssetsList = toAssetsList
@@ -63,15 +69,9 @@ export const converterSlice = createSlice({
     },
 
     setChangeFromAsset: (state, action: PayloadAction<string>) => {
-      const filteredAssets = state.currencyPairList.map((item) => (
-        item.asset
-      )).filter((item) => item.includes(`${action.payload}/`))
-
-      const toAssetsList = filteredAssets.map((item) => (
-        item.split('/')[1]
-      ))
-
-      const assetTo = filteredAssets[0].split('/')[1]
+      const assets = map(state.currencyPairList, 'asset')
+      const toAssetsList = splittedMap(assets, action.payload, 1)
+      const assetTo = toAssetsList[0]
 
       state.assetTo = assetTo
       state.assetFrom = action.payload
