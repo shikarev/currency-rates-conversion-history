@@ -7,13 +7,13 @@ import { getAmount } from 'entities/Converter/model/selectors/getAmount/getAmoun
 export const getTotal = createSelector(
   [getAssetFrom, getAssetTo, getCurrencyPairList, getAmount],
   (assetFrom, assetTo, currencyPairList, amount) => {
-    const result = `${assetFrom}/${assetTo}`
-    const quotes = currencyPairList?.find((x) => x.asset === result)?.quote
+    const asset = `${assetFrom}/${assetTo}`
+    const quote = currencyPairList?.find((currencyPair) => currencyPair.asset === asset)?.quote
 
-    const finish = Number(amount) * Number(quotes)
+    const result = Number(amount) * Number(quote)
 
     if (amount.length > 0) {
-      return String(finish.toFixed(4))
+      return String(result.toFixed(4))
     }
 
     return ''
