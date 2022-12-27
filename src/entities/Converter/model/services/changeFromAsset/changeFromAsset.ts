@@ -1,14 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { Table } from 'entities/ExchangeRate/model/types/exchangeRate'
+import { CurrencyPair } from 'entities/ExchangeRate/model/types/exchangeRate'
 import { ThunkConfig } from 'app/providers/StoreProvider/config/StateSchema'
 import { converterActions } from 'entities/Converter'
 
-interface ChangeFromAssetProps {
-    currentAssets: Table[],
+interface ChangeFromAsset {
+    currentAssets: CurrencyPair[],
     fromAsset: string,
 }
 
-export const changeFromAsset = createAsyncThunk<void, ChangeFromAssetProps, ThunkConfig<string>>(
+export const changeFromAsset = createAsyncThunk<void, ChangeFromAsset, ThunkConfig<string>>(
   'converter/changeFromAsset',
   (changeData, thunkAPI) => {
     const { dispatch } = thunkAPI

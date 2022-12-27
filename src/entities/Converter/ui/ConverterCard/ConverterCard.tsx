@@ -8,7 +8,6 @@ import React, { useCallback, useEffect } from 'react'
 import { converterActions } from 'entities/Converter'
 import SelectArrow from 'shared/assets/icons/select-arrow-down.svg'
 import { SelectInputProps } from '@mui/material/Select/SelectInput'
-import { defaultAssets } from 'entities/Converter/model/services/defaultAssets/defaultAssets'
 import { changeFromAsset } from 'entities/Converter/model/services/changeFromAsset/changeFromAsset'
 import {
   AmountFormControlStyled,
@@ -66,7 +65,7 @@ const ConverterCard = () => {
 
   useEffect(() => {
     if (update) {
-      dispatch(defaultAssets(update))
+      dispatch(converterActions.setDefaultAsset(update))
     }
   }, [dispatch, update])
 
