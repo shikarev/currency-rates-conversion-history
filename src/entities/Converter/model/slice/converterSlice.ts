@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import uniq from 'lodash/uniq'
 import { fetchCurrencyPairs } from 'entities/ExchangeRate/model/services/fetchCurrencyPairs/fetchCurrencyPairs'
 import { ExchangeRate } from 'entities/ExchangeRate'
+import map from 'lodash/map'
+import filter from 'lodash/filter'
 import { ConverterSchema } from '../types/converter'
 
 const initialState: ConverterSchema = {
@@ -21,31 +23,20 @@ export const converterSlice = createSlice({
       state.amount = action.payload
     },
 
-    setAssetFrom: (state, action: PayloadAction<string>) => {
-      state.assetFrom = action.payload
-    },
-
-    setFromAssetsList: (state, action: PayloadAction<string[]>) => {
-      state.fromAssetsList = action.payload
-    },
-
     setAssetTo: (state, action: PayloadAction<string>) => {
       state.assetTo = action.payload
-    },
-
-    setToAssetsList: (state, action: PayloadAction<string[]>) => {
-      state.toAssetsList = action.payload
     },
 
     setChangeFromAsset: (state, action: PayloadAction<string>) => {
       state.assetFrom = action.payload
 
-      const toAssetsList = state.currencyPairList
-        .map((item) => (item.asset))
-        .filter((item) => item.from.includes(action.payload))
+      const toAssetsList = filter(state.currencyPairList, ['asset', { from: action.payload }])
+        .map((item) => item.asset.to)
 
-      state.toAssetsList = toAssetsList.map((item) => item.to)
-      state.assetTo = toAssetsList[0].to
+      const assetTo = toAssetsList[0]
+
+      state.toAssetsList = toAssetsList
+      state.assetTo = assetTo
     },
 
     setTotal: (state, action: PayloadAction<string>) => {
@@ -65,11 +56,13 @@ export const converterSlice = createSlice({
           }
         ))]
 
+        const { from, to } = currencyPairList[0].asset
+
         state.currencyPairList = currencyPairList
-        state.assetFrom = state.currencyPairList[0].asset.from
-        state.assetTo = state.currencyPairList[0].asset.to
-        state.fromAssetsList = uniq(state.currencyPairList.map((item) => item.asset.from))
-        state.toAssetsList = [state.currencyPairList[0].asset.to]
+        state.assetFrom = from
+        state.assetTo = to
+        state.fromAssetsList = uniq(map(currencyPairList, 'asset.from'))
+        state.toAssetsList = [to]
         state.isLoading = false
       })
       .addCase(fetchCurrencyPairs.rejected, (state) => {
