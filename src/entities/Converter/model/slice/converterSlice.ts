@@ -1,33 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { CurrencyPair } from 'entities/ExchangeRate/model/types/exchangeRate'
 import uniq from 'lodash/uniq'
-import map from 'lodash/map'
+import { fetchCurrencyPairs } from 'entities/ExchangeRate/model/services/fetchCurrencyPairs/fetchCurrencyPairs'
+import { ExchangeRate } from 'entities/ExchangeRate'
 import { ConverterSchema } from '../types/converter'
 
 const initialState: ConverterSchema = {
   currencyPairList: [],
-  amount: '',
   assetFrom: '',
   fromAssetsList: [],
   assetTo: '',
   toAssetsList: [],
   isLoading: false,
-  total: '',
-}
-
-function splittedMap(array: any[], includes: any, split: number) {
-  const result = array.filter((item: string) => item.includes(`${includes}/`))
-    .map((item: string) => (
-      item.split('/')[split]
-    ))
-  return result
 }
 
 export const converterSlice = createSlice({
   name: 'converter',
   initialState,
   reducers: {
-    setAmount: (state, action: PayloadAction<string>) => {
+    setAmount: (state, action: PayloadAction<number>) => {
       state.amount = action.payload
     },
 
@@ -43,44 +33,48 @@ export const converterSlice = createSlice({
       state.assetTo = action.payload
     },
 
-    setCurrencyPairList: (state, action: PayloadAction<CurrencyPair[]>) => {
-      state.currencyPairList = action.payload
-    },
-
-    setDefaultAsset: (state) => {
-      const assets = map(state.currencyPairList, 'asset')
-
-      const [assetFrom, assetTo] = assets[0].split('/')
-      const fromAssets = assets.map((item: string) => item.split('/')[0])
-
-      state.assetFrom = assetFrom
-      state.assetTo = assetTo
-
-      const fromAssetsList = uniq(fromAssets)
-
-      const toAssetsList = splittedMap(assets, assetFrom, 1)
-
-      state.fromAssetsList = fromAssetsList
-      state.toAssetsList = toAssetsList
-    },
-
     setToAssetsList: (state, action: PayloadAction<string[]>) => {
       state.toAssetsList = action.payload
     },
 
     setChangeFromAsset: (state, action: PayloadAction<string>) => {
-      const assets = map(state.currencyPairList, 'asset')
-      const toAssetsList = splittedMap(assets, action.payload, 1)
-      const assetTo = toAssetsList[0]
-
-      state.assetTo = assetTo
       state.assetFrom = action.payload
-      state.toAssetsList = toAssetsList
+
+      const toAssetsList = state.currencyPairList
+        .map((item) => (item.asset))
+        .filter((item) => item.from.includes(action.payload))
+
+      state.toAssetsList = toAssetsList.map((item) => item.to)
+      state.assetTo = toAssetsList[0].to
     },
 
     setTotal: (state, action: PayloadAction<string>) => {
       state.total = action.payload
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCurrencyPairs.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(fetchCurrencyPairs.fulfilled, (state, action: PayloadAction<ExchangeRate>) => {
+        const currencyPairList = [...action.payload.assets.map((item) => (
+          {
+            asset: { from: item.asset.split('/')[0], to: item.asset.split('/')[1] },
+            quote: Number(item.quote),
+          }
+        ))]
+
+        state.currencyPairList = currencyPairList
+        state.assetFrom = state.currencyPairList[0].asset.from
+        state.assetTo = state.currencyPairList[0].asset.to
+        state.fromAssetsList = uniq(state.currencyPairList.map((item) => item.asset.from))
+        state.toAssetsList = [state.currencyPairList[0].asset.to]
+        state.isLoading = false
+      })
+      .addCase(fetchCurrencyPairs.rejected, (state) => {
+        state.isLoading = false
+      })
   },
 })
 

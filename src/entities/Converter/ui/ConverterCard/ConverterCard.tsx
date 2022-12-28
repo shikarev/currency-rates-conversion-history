@@ -2,12 +2,12 @@ import {
   FormHelperText, MenuItem, OutlinedInputProps, Typography,
 } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { getCurrencyPairList } from 'entities/ExchangeRate/model/selectors/getCurrencyPairList/getCurrencyPairList'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
 import React, { useCallback, useEffect } from 'react'
 import { converterActions } from 'entities/Converter'
 import SelectArrow from 'shared/assets/icons/select-arrow-down.svg'
 import { SelectInputProps } from '@mui/material/Select/SelectInput'
+import { fetchCurrencyPairs } from 'entities/ExchangeRate/model/services/fetchCurrencyPairs/fetchCurrencyPairs'
 import {
   AmountFormControlStyled,
   AmountOutlinedInputStyled,
@@ -33,10 +33,9 @@ import { getToAssetsList } from '../../model/selectors/getToAssetsList/getToAsse
 import { getFromAssetsList } from '../../model/selectors/getFromAssetsList/getFromAssetsList'
 
 const ConverterCard = () => {
-  const currencyPairList = useSelector(getCurrencyPairList)
   const dispatch = useAppDispatch()
 
-  const amount = useSelector(getAmount)
+  const amount = useSelector(getAmount) ?? ''
   const total = useSelector(getTotal)
   const assetFrom = useSelector(getAssetFrom)
   const assetTo = useSelector(getAssetTo)
@@ -47,16 +46,9 @@ const ConverterCard = () => {
     event.preventDefault()
   }
 
-  const onConverterStart = useCallback(async () => {
-    if (currencyPairList) {
-      await dispatch(converterActions.setCurrencyPairList(currencyPairList))
-      dispatch(converterActions.setDefaultAsset())
-    }
-  }, [dispatch, currencyPairList])
-
   const onChangeAmount: OutlinedInputProps['onChange'] = useCallback((event) => {
     const value = event.target.value.replace(/\D/g, '')
-    dispatch(converterActions.setAmount(value))
+    dispatch(converterActions.setAmount(+value))
   }, [dispatch])
 
   const onChangeFromAsset: SelectInputProps['onChange'] = useCallback((event) => {
@@ -66,10 +58,6 @@ const ConverterCard = () => {
   const onChangeAssetTo: SelectInputProps['onChange'] = useCallback((event) => {
     dispatch(converterActions.setAssetTo(event.target.value))
   }, [dispatch])
-
-  useEffect(() => {
-    onConverterStart()
-  }, [dispatch, onConverterStart, currencyPairList])
 
   return (
     <ConverterCardFormStyled onSubmit={handleSubmit}>
