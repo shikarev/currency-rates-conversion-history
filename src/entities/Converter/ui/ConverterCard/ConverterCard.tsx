@@ -3,11 +3,10 @@ import {
 } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { converterActions } from 'entities/Converter'
 import SelectArrow from 'shared/assets/icons/select-arrow-down.svg'
 import { SelectInputProps } from '@mui/material/Select/SelectInput'
-import { fetchCurrencyPairs } from 'entities/ExchangeRate/model/services/fetchCurrencyPairs/fetchCurrencyPairs'
 import {
   AmountFormControlStyled,
   AmountOutlinedInputStyled,
