@@ -1,4 +1,3 @@
-import { classNames } from 'shared/lib/classNames/classNames'
 import { TableDataGrid } from 'shared/ui/TableDataGrid/TableDataGrid'
 import { memo, useEffect } from 'react'
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
@@ -8,19 +7,13 @@ import { getHistoryQuotesData } from 'entities/HistoryQuotes/model/selectors/get
 import { GridColDef } from '@mui/x-data-grid'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { fetchHistoryQuotes } from 'entities/HistoryQuotes/model/services/fetchHistoryQuotes/fetchHistoryQuotes'
-import cls from './HistoryQuotesCard.module.scss'
+import { HistoryQuotesCardStyled } from 'entities/HistoryQuotes/ui/HistoryQuotesCard/HistoryQuotesCard.styled'
 
 const reducers: ReducersList = {
   historyQuotes: historyQuotesReducer,
 }
 
-interface HistoryCardProps {
-  className?: string
-}
-
-const HistoryQuotesCard = memo((props: HistoryCardProps) => {
-  const { className } = props
-
+const HistoryQuotesCard = memo(() => {
   const columns: GridColDef[] = [
     {
       field: 'asset',
@@ -67,7 +60,6 @@ const HistoryQuotesCard = memo((props: HistoryCardProps) => {
   ]
 
   const dispatch = useAppDispatch()
-
   const data = useSelector(getHistoryQuotesData)
 
   useEffect(() => {
@@ -79,9 +71,9 @@ const HistoryQuotesCard = memo((props: HistoryCardProps) => {
 
   return (
     <DynamicModuleLoader reducers={reducers}>
-      <div className={classNames(cls.HistoryCard, {}, [className])}>
+      <HistoryQuotesCardStyled>
         <TableDataGrid data={data || []} columns={columns} />
-      </div>
+      </HistoryQuotesCardStyled>
     </DynamicModuleLoader>
   )
 })

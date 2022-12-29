@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import cuid from 'cuid'
 import { fetchHistoryQuotes } from 'entities/HistoryQuotes/model/services/fetchHistoryQuotes/fetchHistoryQuotes'
-import { HistoryQuotes, HistoryQuotesSchema } from '../types/history'
+import { HistoryQuotesSchema, HistoryTable } from '../types/history'
 
 const initialState: HistoryQuotesSchema = {
   data: [],
@@ -20,9 +19,9 @@ export const historyQuotesSlice = createSlice({
         state.error = undefined
         state.isLoading = true
       })
-      .addCase(fetchHistoryQuotes.fulfilled, (state, action: PayloadAction<HistoryQuotes>) => {
+      .addCase(fetchHistoryQuotes.fulfilled, (state, action: PayloadAction<HistoryTable[]>) => {
         state.isLoading = false
-        state.data = action.payload.deals.map((item) => ({ ...item, id: cuid() }))
+        state.data = action.payload
       })
       .addCase(fetchHistoryQuotes.rejected, (state, action) => {
         state.isLoading = false

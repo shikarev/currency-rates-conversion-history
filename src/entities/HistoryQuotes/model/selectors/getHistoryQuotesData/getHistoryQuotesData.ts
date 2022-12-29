@@ -1,3 +1,7 @@
-import { StateSchema } from 'app/providers/StoreProvider'
+import { createSelector } from '@reduxjs/toolkit'
+import { getHistoryQuotes } from 'entities/HistoryQuotes/model/selectors/getHistoryQuotes'
 
-export const getHistoryQuotesData = (state: StateSchema) => state.historyQuotes?.data
+export const getHistoryQuotesData = createSelector(
+  [getHistoryQuotes],
+  (historyQuotes) => historyQuotes?.data,
+)

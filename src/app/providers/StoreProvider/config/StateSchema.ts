@@ -8,6 +8,7 @@ import { ExchangeRateSchema } from 'entities/ExchangeRate'
 import { ConverterSchema } from 'entities/Converter/model/types/converter'
 import { authApi } from 'shared/api'
 import { currencyApi } from 'shared/api/endpoints/currencyApi'
+import { HistoryQuotesSchema } from 'entities/HistoryQuotes'
 
 export interface StateSchema {
   user: UserSchema
@@ -18,7 +19,7 @@ export interface StateSchema {
   // Async Reducers
   login?: LoginSchema
   exchangeRate?: ExchangeRateSchema
-  historyQuotes?: any
+  historyQuotes?: HistoryQuotesSchema
 }
 
 export type StateSchemaKey = keyof StateSchema

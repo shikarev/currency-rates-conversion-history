@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/dist/query/react'
 import { authorizedQuery } from 'shared/api/base/base'
 import { ExchangeRate } from 'entities/ExchangeRate'
+import { HistoryQuotes } from 'entities/HistoryQuotes'
 
 export const currencyApi = createApi({
   reducerPath: 'currencyApi',
@@ -12,6 +13,15 @@ export const currencyApi = createApi({
         method: 'POST',
         body: {
           action: 'quote',
+        },
+      }),
+    }),
+    history: builder.query<HistoryQuotes, void>({
+      query: () => ({
+        url: '',
+        method: 'POST',
+        body: {
+          action: 'history',
         },
       }),
     }),
