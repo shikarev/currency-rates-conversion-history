@@ -1,67 +1,67 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Table } from 'entities/ExchangeRate/model/types/exchangeRate'
-import { converterSchema } from '../types/converter'
+import uniq from 'lodash/uniq'
+import map from 'lodash/map'
+import filter from 'lodash/filter'
+import {
+  fetchConverterCurrencyPairs,
+} from 'entities/Converter/model/services/fetchConverterCurrencyPairs/fetchConverterCurrencyPairs'
+import { ConverterSchema, TransformedCurrencyPair } from '../types/converter'
 
-const initialState: converterSchema = {
-  amount: '',
-  first: '',
-  firstItems: [],
-  second: '',
-  secondItems: [],
+const initialState: ConverterSchema = {
+  currencyPairList: [],
+  assetFrom: '',
+  fromAssetsList: [],
+  assetTo: '',
+  toAssetsList: [],
   isLoading: false,
-  total: '',
 }
 
 export const converterSlice = createSlice({
   name: 'converter',
   initialState,
   reducers: {
-    setCurrency: (state, action: PayloadAction<string>) => {
+    setAmount: (state, action: PayloadAction<number>) => {
       state.amount = action.payload
     },
 
-    setFirst: (state, action: PayloadAction<string>) => {
-      state.first = action.payload
+    setAssetTo: (state, action: PayloadAction<string>) => {
+      state.assetTo = action.payload
     },
 
-    setSecond: (state, action: PayloadAction<string>) => {
-      state.second = action.payload
+    setChangeFromAsset: (state, action: PayloadAction<string>) => {
+      state.assetFrom = action.payload
+
+      const toAssetsList = filter(state.currencyPairList, ['asset', { from: action.payload }])
+        .map((item) => item.asset.to)
+
+      const assetTo = toAssetsList[0]
+
+      state.toAssetsList = toAssetsList
+      state.assetTo = assetTo
     },
 
-    setFirstItems: (state, action: PayloadAction<Table[]>) => {
-      const firstPair = action.payload.map((item) => (
-        item.asset.split('/')[0]
-      ))
-      const filteredItem = firstPair.filter((element, index) => firstPair.indexOf(element) === index)
-      state.firstItems = filteredItem
-
-      const firstInArray = filteredItem[0]
-      state.first = firstInArray
-
-      const secondFilter = action.payload.map((item) => (
-        item.asset
-      )).filter((item) => item.includes(`${firstInArray}/`))
-
-      const secondPair = secondFilter.map((item) => (
-        item.split('/')[1]
-      ))
-
-      const secondChoose = secondFilter[0].split('/')[1]
-
-      state.second = secondChoose
-      state.secondItems = secondPair
-    },
-
-    setSecondItems: (state, action: PayloadAction<string[]>) => {
-      const secondPair = action.payload.map((item) => (
-        item.split('/')[1]
-      ))
-      state.secondItems = secondPair
-    },
-
-    setTotal: (state, action: PayloadAction<string>) => {
+    setTotal: (state, action: PayloadAction<number>) => {
       state.total = action.payload
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchConverterCurrencyPairs.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(fetchConverterCurrencyPairs.fulfilled, (state, action: PayloadAction<TransformedCurrencyPair[]>) => {
+        const { from, to } = action.payload[0].asset
+
+        state.currencyPairList = action.payload
+        state.assetFrom = from
+        state.assetTo = to
+        state.fromAssetsList = uniq(map(action.payload, 'asset.from'))
+        state.toAssetsList = [to]
+        state.isLoading = false
+      })
+      .addCase(fetchConverterCurrencyPairs.rejected, (state) => {
+        state.isLoading = false
+      })
   },
 })
 

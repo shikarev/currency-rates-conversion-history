@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useEffect } from 'react'
 import { classNames } from 'shared/lib/classNames/classNames'
 import { Box, IconButton } from '@mui/material'
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
@@ -10,6 +10,7 @@ import { GridColDef } from '@mui/x-data-grid'
 import StarOutlined from 'shared/assets/icons/star-outlined.svg'
 import StarFilled from 'shared/assets/icons/star-filled.svg'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
+import { fetchCurrencyPairs } from 'entities/ExchangeRate/model/services/fetchCurrencyPairs/fetchCurrencyPairs'
 import cls from './ExchangeRateCard.module.scss'
 
 const reducers: ReducersList = {
@@ -22,6 +23,8 @@ interface ExchangeRateCardProps {
 
 const ExchangeRateCard = memo((props: ExchangeRateCardProps) => {
   const dispatch = useAppDispatch()
+
+  const data = useSelector(getExchangeRateData)
 
   const removeFavorite = (id: string) => {
     dispatch(exchangeRateActions.removeFromFavorites(id))
@@ -74,7 +77,10 @@ const ExchangeRateCard = memo((props: ExchangeRateCardProps) => {
 
   const { className } = props
 
-  const data = useSelector(getExchangeRateData)
+  useEffect(() => {
+    dispatch(fetchCurrencyPairs())
+    console.log('exchange')
+  }, [dispatch])
 
   return (
     <DynamicModuleLoader reducers={reducers}>

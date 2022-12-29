@@ -1,10 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import cuid from 'cuid'
 import { fetchCurrencyPairs } from '../services/fetchCurrencyPairs/fetchCurrencyPairs'
-import { ExchangeRate, ExchangeRateSchema } from '../types/exchangeRate'
+import { CurrencyPair, ExchangeRateSchema } from '../types/exchangeRate'
 
 const initialState: ExchangeRateSchema = {
-  data: undefined,
   isLoading: false,
   error: undefined,
   table: [],
@@ -37,10 +35,9 @@ export const exchangeRateSlice = createSlice({
         state.error = undefined
         state.isLoading = true
       })
-      .addCase(fetchCurrencyPairs.fulfilled, (state, action: PayloadAction<ExchangeRate>) => {
+      .addCase(fetchCurrencyPairs.fulfilled, (state, action: PayloadAction<CurrencyPair[]>) => {
         state.isLoading = false
-        state.data = action.payload
-        state.table = action.payload.assets.map((item) => ({ ...item, id: cuid(), favorite: false }))
+        state.table = action.payload
       })
       .addCase(fetchCurrencyPairs.rejected, (state, action) => {
         state.isLoading = false
