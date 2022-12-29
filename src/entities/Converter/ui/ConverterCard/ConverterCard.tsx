@@ -3,7 +3,7 @@ import {
 } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { converterActions } from 'entities/Converter'
 import SelectArrow from 'shared/assets/icons/select-arrow-down.svg'
 import { SelectInputProps } from '@mui/material/Select/SelectInput'
@@ -27,9 +27,11 @@ import {
 import { getAmount } from '../../model/selectors/getAmount/getAmount'
 import { getAssetFrom } from '../../model/selectors/getAssetFrom/getAssetFrom'
 import { getAssetTo } from '../../model/selectors/getAssetTo/getAssetTo'
-import { getTotal } from '../../model/selectors/getTotal/getTotal'
 import { getToAssetsList } from '../../model/selectors/getToAssetsList/getToAssetsList'
 import { getFromAssetsList } from '../../model/selectors/getFromAssetsList/getFromAssetsList'
+import { fetchConverterCurrencyPairs } from
+  '../../model/services/fetchConverterCurrencyPairs/fetchConverterCurrencyPairs'
+import { getTotal } from '../../model/selectors/getTotal/getTotal'
 
 const ConverterCard = () => {
   const dispatch = useAppDispatch()
@@ -56,6 +58,11 @@ const ConverterCard = () => {
 
   const onChangeAssetTo: SelectInputProps['onChange'] = useCallback((event) => {
     dispatch(converterActions.setAssetTo(event.target.value))
+  }, [dispatch])
+
+  useEffect(() => {
+    dispatch(fetchConverterCurrencyPairs())
+    console.log('converter')
   }, [dispatch])
 
   return (
@@ -117,7 +124,7 @@ const ConverterCard = () => {
                 Итого
               </TotalFormHelperText>
               <Typography>
-                {total}
+                {total.toFixed(4)}
               </Typography>
             </TotalWrapper>
           )}

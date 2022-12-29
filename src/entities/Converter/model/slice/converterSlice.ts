@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import uniq from 'lodash/uniq'
-import { fetchCurrencyPairs } from 'entities/ExchangeRate/model/services/fetchCurrencyPairs/fetchCurrencyPairs'
-import { ExchangeRate } from 'entities/ExchangeRate'
 import map from 'lodash/map'
 import filter from 'lodash/filter'
-import { ConverterSchema } from '../types/converter'
+import {
+  fetchConverterCurrencyPairs,
+} from 'entities/Converter/model/services/fetchConverterCurrencyPairs/fetchConverterCurrencyPairs'
+import { ConverterSchema, TransformedCurrencyPair } from '../types/converter'
 
 const initialState: ConverterSchema = {
   currencyPairList: [],
@@ -39,33 +40,26 @@ export const converterSlice = createSlice({
       state.assetTo = assetTo
     },
 
-    setTotal: (state, action: PayloadAction<string>) => {
+    setTotal: (state, action: PayloadAction<number>) => {
       state.total = action.payload
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCurrencyPairs.pending, (state) => {
+      .addCase(fetchConverterCurrencyPairs.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(fetchCurrencyPairs.fulfilled, (state, action: PayloadAction<ExchangeRate>) => {
-        const currencyPairList = [...action.payload.assets.map((item) => (
-          {
-            asset: { from: item.asset.split('/')[0], to: item.asset.split('/')[1] },
-            quote: Number(item.quote),
-          }
-        ))]
+      .addCase(fetchConverterCurrencyPairs.fulfilled, (state, action: PayloadAction<TransformedCurrencyPair[]>) => {
+        const { from, to } = action.payload[0].asset
 
-        const { from, to } = currencyPairList[0].asset
-
-        state.currencyPairList = currencyPairList
+        state.currencyPairList = action.payload
         state.assetFrom = from
         state.assetTo = to
-        state.fromAssetsList = uniq(map(currencyPairList, 'asset.from'))
+        state.fromAssetsList = uniq(map(action.payload, 'asset.from'))
         state.toAssetsList = [to]
         state.isLoading = false
       })
-      .addCase(fetchCurrencyPairs.rejected, (state) => {
+      .addCase(fetchConverterCurrencyPairs.rejected, (state) => {
         state.isLoading = false
       })
   },

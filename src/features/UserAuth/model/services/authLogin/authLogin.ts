@@ -2,7 +2,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { RESULT_STATUS, userActions } from 'entities/User'
 import { USER_LOCALSTORAGE_KEY } from 'shared/const/localStorage'
 import { loginActions } from 'features/UserAuth/model/slice/loginSlice'
-import { LoginProps, authApi } from 'features/UserAuth'
+import { LoginProps } from 'features/UserAuth'
+import { authApi } from 'shared/api'
 
 export const authLogin = createAsyncThunk<void, LoginProps>(
   'auth/login',

@@ -16,5 +16,5 @@ export interface ConverterSchema {
     fromAssetsList: string[],
     toAssetsList: string[],
     isLoading: boolean,
-    total?: string
+    total?: number
 }

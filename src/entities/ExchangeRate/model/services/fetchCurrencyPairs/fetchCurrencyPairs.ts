@@ -1,19 +1,20 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { ExchangeRate } from 'entities/ExchangeRate'
+import { currencyApi } from 'shared/api'
+import { CurrencyPair } from 'entities/ExchangeRate/model/types/exchangeRate'
+import cuid from 'cuid'
 
-export const fetchCurrencyPairs = createAsyncThunk<ExchangeRate, void, { rejectValue: string}>(
+export const fetchCurrencyPairs = createAsyncThunk<CurrencyPair[], void, { rejectValue: string}>(
   'quotes/fetchCurrencyPairs',
-  async (_, thunkAPI) => {
+  async (_, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.post<ExchangeRate>('https://test-front-spa.mmtestprojectsfactory.com/api/', {
-        action: 'quote',
-      })
+      const data = await dispatch(currencyApi.endpoints.quotes.initiate()).unwrap()
 
-      return response.data
+      const currencyPair = data.assets.map((item) => ({ ...item, id: cuid(), favorite: false }))
+
+      return currencyPair
     } catch (e) {
       console.log(e)
-      return thunkAPI.rejectWithValue('error')
+      return rejectWithValue('error')
     }
   },
 )

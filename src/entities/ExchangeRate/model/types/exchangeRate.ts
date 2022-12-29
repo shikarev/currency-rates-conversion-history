@@ -15,8 +15,7 @@ export interface CurrencyPair extends ExchangeRateAssets {
 }
 
 export interface ExchangeRateSchema {
-    data?: ExchangeRate
     isLoading: boolean
     error?: string
-    table: Array<CurrencyPair>
+    table: CurrencyPair[]
 }

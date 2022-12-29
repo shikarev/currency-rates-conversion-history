@@ -8,11 +8,11 @@ import { getCurrencyPairList } from '../getCurrencyPairList/getCurrencyPairList'
 export const getTotal = createSelector(
   [getAssetFrom, getAssetTo, getCurrencyPairList, getAmount],
   (assetFrom, assetTo, currencyPairList, amount) => {
-    const { quote } = filter(currencyPairList, ['asset', { from: assetFrom, to: assetTo }])[0]
+    const quote = filter(currencyPairList, ['asset', { from: assetFrom, to: assetTo }])[0]?.quote
 
-    if (amount) {
+    if (amount && quote) {
       const result = amount * quote
-      return result.toFixed(4)
+      return result
     }
 
     return ''

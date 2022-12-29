@@ -3,7 +3,8 @@ import {
 } from '@reduxjs/toolkit'
 import { userReducer } from 'entities/User'
 import { converterReducer } from 'entities/Converter'
-import { authApi } from 'features/UserAuth'
+import { authApi } from 'shared/api'
+import { currencyApi } from 'shared/api/endpoints/currencyApi'
 import { createReducerManager } from './reducerManager'
 import { StateSchema } from './StateSchema'
 
@@ -16,6 +17,7 @@ export function createReduxStore(
     user: userReducer,
     converter: converterReducer,
     [authApi.reducerPath]: authApi.reducer,
+    [currencyApi.reducerPath]: currencyApi.reducer,
   }
 
   const reducerManager = createReducerManager(rootReducers)
@@ -25,7 +27,7 @@ export function createReduxStore(
     devTools: __IS_DEV__,
     preloadedState: initialState,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
-      .concat(authApi.middleware),
+      .concat(authApi.middleware, currencyApi.middleware),
   })
 
   // @ts-ignore

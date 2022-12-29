@@ -1,16 +1,19 @@
 import { UserSchema } from 'entities/User'
-import { authApi, LoginSchema } from 'features/UserAuth'
+import { LoginSchema } from 'features/UserAuth'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import {
   AnyAction, CombinedState, Reducer, ReducersMapObject,
 } from '@reduxjs/toolkit'
 import { ExchangeRateSchema } from 'entities/ExchangeRate'
 import { ConverterSchema } from 'entities/Converter/model/types/converter'
+import { authApi } from 'shared/api'
+import { currencyApi } from 'shared/api/endpoints/currencyApi'
 
 export interface StateSchema {
   user: UserSchema
   converter: ConverterSchema
   [authApi.reducerPath]: ReturnType<typeof authApi.reducer>
+  [currencyApi.reducerPath]: ReturnType<typeof currencyApi.reducer>
 
   // Async Reducers
   login?: LoginSchema
