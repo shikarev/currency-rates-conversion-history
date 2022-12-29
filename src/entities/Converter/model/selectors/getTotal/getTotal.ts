@@ -1,5 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit'
 import filter from 'lodash/filter'
+import first from 'lodash/first'
 import { getAssetFrom } from '../getAssetFrom/getAssetFrom'
 import { getAssetTo } from '../getAssetTo/getAssetTo'
 import { getAmount } from '../getAmount/getAmount'
@@ -8,13 +9,15 @@ import { getCurrencyPairList } from '../getCurrencyPairList/getCurrencyPairList'
 export const getTotal = createSelector(
   [getAssetFrom, getAssetTo, getCurrencyPairList, getAmount],
   (assetFrom, assetTo, currencyPairList, amount) => {
-    const quote = filter(currencyPairList, ['asset', { from: assetFrom, to: assetTo }])[0]?.quote
+    const currencyPair = first(filter(
+      currencyPairList,
+      ['asset', { from: assetFrom, to: assetTo }],
+    ))
 
-    if (amount && quote) {
-      const result = amount * quote
-      return result
+    if (!currencyPair || amount == null) {
+      return undefined
     }
 
-    return ''
+    return currencyPair.quote * amount
   },
 )

@@ -8,12 +8,14 @@ export const fetchConverterCurrencyPairs = createAsyncThunk<TransformedCurrencyP
     try {
       const data = await dispatch(currencyApi.endpoints.quotes.initiate()).unwrap()
 
-      const currencyPair = [...data.assets.map((item) => (
-        {
-          asset: { from: item.asset.split('/')[0], to: item.asset.split('/')[1] },
+      const currencyPair = data.assets.map((item) => {
+        const [from, to] = item.asset.split('/')
+
+        return ({
+          asset: { from, to },
           quote: Number(item.quote),
-        }
-      ))]
+        })
+      })
 
       return currencyPair
     } catch (e) {
