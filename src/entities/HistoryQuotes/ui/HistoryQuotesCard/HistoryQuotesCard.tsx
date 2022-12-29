@@ -1,5 +1,5 @@
 import { TableDataGrid } from 'shared/ui/TableDataGrid/TableDataGrid'
-import { memo, useEffect } from 'react'
+import React, { memo, useEffect } from 'react'
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import { historyQuotesReducer } from 'entities/HistoryQuotes'
 import { useSelector } from 'react-redux'
@@ -7,13 +7,23 @@ import { getHistoryQuotesData } from 'entities/HistoryQuotes/model/selectors/get
 import { GridColDef } from '@mui/x-data-grid'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { fetchHistoryQuotes } from 'entities/HistoryQuotes/model/services/fetchHistoryQuotes/fetchHistoryQuotes'
-import { HistoryQuotesCardStyled } from 'entities/HistoryQuotes/ui/HistoryQuotesCard/HistoryQuotesCard.styled'
+import {
+  HistoryQuotesCardStyled, TableCellStyled,
+  TableContainerStyled, TableHeadStyled,
+} from 'entities/HistoryQuotes/ui/HistoryQuotesCard/HistoryQuotesCard.styled'
+import { getHistoryListId } from 'entities/HistoryQuotes/model/selectors/getHistoryListId/getHistoryListId'
+import { getHistoryQuotesItem } from 'entities/HistoryQuotes/model/selectors/getHistoryQuotesItem/getHistoryQuotesItem'
+import {
+  Pagination,
+  Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow,
+} from '@mui/material'
+import HistoryQuotesRow from 'entities/HistoryQuotes/ui/HistoryQuotesRow/HistoryQuotesRow'
 
 const reducers: ReducersList = {
   historyQuotes: historyQuotesReducer,
 }
 
-const HistoryQuotesCard = memo(() => {
+const HistoryQuotesCard: React.FC = memo(() => {
   const columns: GridColDef[] = [
     {
       field: 'asset',
@@ -61,6 +71,16 @@ const HistoryQuotesCard = memo(() => {
 
   const dispatch = useAppDispatch()
   const data = useSelector(getHistoryQuotesData)
+  const idList = useSelector(getHistoryListId)
+
+  const [page, setPage] = React.useState(0)
+  const rowsPerPage = 10
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value)
+  }
+
+  const rows = data
 
   useEffect(() => {
     if (!data) {
@@ -72,8 +92,30 @@ const HistoryQuotesCard = memo(() => {
   return (
     <DynamicModuleLoader reducers={reducers}>
       <HistoryQuotesCardStyled>
-        <TableDataGrid data={data || []} columns={columns} />
+        <TableContainerStyled>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHeadStyled>
+              <TableRow>
+                <TableCellStyled>Актив</TableCellStyled>
+                <TableCellStyled align="right">Начало</TableCellStyled>
+                <TableCellStyled align="right">Котировка</TableCellStyled>
+                <TableCellStyled align="right">Конец</TableCellStyled>
+                <TableCellStyled align="right">Котировка</TableCellStyled>
+                <TableCellStyled align="right">Прибыль</TableCellStyled>
+              </TableRow>
+            </TableHeadStyled>
+            <TableBody>
+              {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                <HistoryQuotesRow key={row.id} id={row.id} />
+              ))}
+            </TableBody>
+            <TableFooter>
+              <Pagination count={10} page={page} onChange={handleChange} />
+            </TableFooter>
+          </Table>
+        </TableContainerStyled>
       </HistoryQuotesCardStyled>
+
     </DynamicModuleLoader>
   )
 })

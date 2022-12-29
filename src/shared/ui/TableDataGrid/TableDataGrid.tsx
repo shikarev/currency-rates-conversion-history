@@ -48,7 +48,7 @@ export function CustomPagination() {
   )
 }
 
-const TableDataGrid = ({ data, columns, hideFooterPagination }: TableDataGridProps) => (
+const TableDataGrid: React.FC<TableDataGridProps> = ({ data, columns, hideFooterPagination }) => (
   <DataGridStyled
     loading={!data}
     rows={data}
