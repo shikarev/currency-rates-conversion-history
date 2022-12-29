@@ -7,19 +7,18 @@ export interface HistoryDeals {
     startQuote: string
 }
 
-export interface HistoryQuotes {
-    deals: Array<HistoryDeals>
-    result: string,
-    error?: string
-}
-
 export interface HistoryTable extends HistoryDeals {
     id: string
 }
 
+export interface HistoryQuotes {
+    deals: HistoryDeals[]
+    result: string,
+    error?: string
+}
+
 export interface HistoryQuotesSchema {
-    data?: HistoryQuotes
+    data?: HistoryTable[]
     isLoading: boolean
     error?: string
-    table: Array<HistoryTable>
 }

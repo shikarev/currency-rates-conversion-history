@@ -73,6 +73,7 @@ const HistoryQuotesCard = memo((props: HistoryCardProps) => {
   useEffect(() => {
     if (!data) {
       dispatch(fetchHistoryQuotes())
+      console.log('history')
     }
   }, [dispatch, data])
 

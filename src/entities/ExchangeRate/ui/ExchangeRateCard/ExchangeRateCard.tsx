@@ -6,11 +6,12 @@ import { exchangeRateActions, exchangeRateReducer } from 'entities/ExchangeRate'
 import { getExchangeRateData } from 'entities/ExchangeRate/model/selectors/getExchangeRateData/getExchangeRateData'
 import { useSelector } from 'react-redux'
 import { TableDataGrid } from 'shared/ui/TableDataGrid/TableDataGrid'
-import { GridColDef } from '@mui/x-data-grid'
+import { GridColDef, GridRenderCellParams, GridRowParams } from '@mui/x-data-grid'
 import StarOutlined from 'shared/assets/icons/star-outlined.svg'
 import StarFilled from 'shared/assets/icons/star-filled.svg'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { fetchCurrencyPairs } from 'entities/ExchangeRate/model/services/fetchCurrencyPairs/fetchCurrencyPairs'
+import { CurrencyPair } from 'entities/ExchangeRate/model/types/exchangeRate'
 import cls from './ExchangeRateCard.module.scss'
 
 const reducers: ReducersList = {
@@ -40,7 +41,7 @@ const ExchangeRateCard = memo((props: ExchangeRateCardProps) => {
       headerName: '',
       flex: 0.15,
       sortable: false,
-      renderCell: (params) => (
+      renderCell: (params:GridRenderCellParams<GridRowParams, CurrencyPair>) => (
         <IconButton
           onClick={() => (
             params.row.favorite
