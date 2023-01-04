@@ -7,16 +7,19 @@ import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { fetchHistoryQuotes } from 'entities/HistoryQuotes/model/services/fetchHistoryQuotes/fetchHistoryQuotes'
 import { getHistoryListId } from 'entities/HistoryQuotes/model/selectors/getHistoryListId/getHistoryListId'
-import { Table, TableBody, TableRow } from '@mui/material'
 import Arrow from 'shared/assets/icons/big-arrow.svg'
 import {
-  HistoryQuotesCardStyled, IconButtonArrowLeftStyled,
+  HistoryQuotesCardStyled,
+  IconButtonArrowLeftStyled,
   IconButtonArrowRightStyled,
   PageCountWrapperStyled,
   PaginationWrapper,
+  TableBodyStyled,
   TableCellStyled,
   TableContainerStyled,
   TableHeadStyled,
+  TableRowStyled,
+  TableStyled,
 } from './HistoryQuotesCard.styled'
 import { HistoryQuotesRow } from '../HistoryQuotesRow/HistoryQuotesRow'
 
@@ -50,23 +53,23 @@ const HistoryQuotesCard: React.FC = memo(() => {
     <DynamicModuleLoader reducers={reducers}>
       <HistoryQuotesCardStyled>
         <TableContainerStyled>
-          <Table sx={{ minWidth: 650 }}>
+          <TableStyled>
             <TableHeadStyled>
-              <TableRow>
+              <TableRowStyled>
                 <TableCellStyled align="left" width="85px">Актив</TableCellStyled>
                 <TableCellStyled align="left" width="120px">Начало</TableCellStyled>
                 <TableCellStyled align="left" width="110px">Котировка</TableCellStyled>
                 <TableCellStyled align="left" width="120px">Конец</TableCellStyled>
                 <TableCellStyled align="left" width="110px">Котировка</TableCellStyled>
                 <TableCellStyled align="left" width="85px">Прибыль</TableCellStyled>
-              </TableRow>
+              </TableRowStyled>
             </TableHeadStyled>
-            <TableBody sx={{ height: '460px' }}>
+            <TableBodyStyled>
               {listId?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                 <HistoryQuotesRow key={row.id} id={row.id} />
               ))}
-            </TableBody>
-          </Table>
+            </TableBodyStyled>
+          </TableStyled>
           {!totalPages ? null
             : (
               <PaginationWrapper>

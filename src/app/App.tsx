@@ -11,9 +11,7 @@ function App() {
       <Suspense fallback={<Loader />}>
         <SessionCheck />
         <Navbar />
-        <div className="content-page">
-          <AppRouter />
-        </div>
+        <AppRouter />
       </Suspense>
     </div>
   )

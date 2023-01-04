@@ -1,10 +1,14 @@
 import {
-  Box, IconButton, styled, TableCell, TableContainer, TableHead,
+  Box, IconButton, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 } from '@mui/material'
 
 export const HistoryQuotesCardStyled = styled(Box)({
   maxWidth: '1000px',
   minWidth: '300px',
+})
+
+export const TableStyled = styled(Table)({
+  minWidth: '650px',
 })
 
 export const TableContainerStyled = styled(TableContainer)({
@@ -21,9 +25,22 @@ export const TableHeadStyled = styled(TableHead)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
 }))
 
+export const TableBodyStyled = styled(TableBody)(({ theme }) => ({
+  display: 'flex',
+  height: '340px',
+  flexDirection: 'column',
+  overflowY: 'scroll',
+}))
+
+export const TableRowStyled = styled(TableRow)(({ theme }) => ({
+  display: 'flex',
+}))
+
 export const TableCellStyled = styled(TableCell)({
   color: '#fff',
   padding: '10px',
+  display: 'flex',
+  flex: 1,
 })
 
 export const PaginationWrapper = styled(Box)({
