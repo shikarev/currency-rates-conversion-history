@@ -4,8 +4,8 @@ import { getHistoryQuotesItem } from 'entities/HistoryQuotes/model/selectors/get
 import { HistoryId } from 'entities/HistoryQuotes/model/types/history'
 import { TableCellStyled, TableRowStyled } from './HistoryQuotesRow.styled'
 
-const HistoryQuotesRow = ({ id }: HistoryId) => {
-  const historyItem = useSelector(getHistoryQuotesItem({ id }))
+const HistoryQuotesRow: React.FC<HistoryId> = (id) => {
+  const historyItem = useSelector(getHistoryQuotesItem(id))
 
   return (
     <TableRowStyled>
