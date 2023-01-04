@@ -1,4 +1,8 @@
-export interface HistoryDeals {
+export interface HistoryId {
+    id: string
+}
+
+export interface HistoryDealsData {
     asset: string
     finishDate: string
     finishQuote: string
@@ -7,18 +11,18 @@ export interface HistoryDeals {
     startQuote: string
 }
 
-export interface HistoryTable extends HistoryDeals {
+export interface HistoryTableData extends HistoryDealsData {
     id: string
 }
 
 export interface HistoryQuotes {
-    deals: HistoryDeals[]
+    deals: HistoryDealsData[]
     result: string,
     error?: string
 }
 
 export interface HistoryQuotesSchema {
-    data?: HistoryTable[]
+    data?: HistoryTableData[]
     isLoading: boolean
     error?: string
 }

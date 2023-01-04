@@ -1,9 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { fetchHistoryQuotes } from 'entities/HistoryQuotes/model/services/fetchHistoryQuotes/fetchHistoryQuotes'
-import { HistoryQuotesSchema, HistoryTable } from '../types/history'
+import { HistoryQuotesSchema, HistoryTableData } from '../types/history'
 
 const initialState: HistoryQuotesSchema = {
-  data: [],
   isLoading: false,
   error: undefined,
 }
@@ -19,7 +18,7 @@ export const historyQuotesSlice = createSlice({
         state.error = undefined
         state.isLoading = true
       })
-      .addCase(fetchHistoryQuotes.fulfilled, (state, action: PayloadAction<HistoryTable[]>) => {
+      .addCase(fetchHistoryQuotes.fulfilled, (state, action: PayloadAction<HistoryTableData[]>) => {
         state.isLoading = false
         state.data = action.payload
       })
