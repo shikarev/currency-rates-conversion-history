@@ -11,9 +11,7 @@ export interface HistoryDealsData {
     startQuote: string
 }
 
-export interface HistoryTableData extends HistoryDealsData {
-    id: string
-}
+export interface HistoryQuotesData extends HistoryDealsData, HistoryId {}
 
 export interface HistoryQuotes {
     deals: HistoryDealsData[]
@@ -22,7 +20,7 @@ export interface HistoryQuotes {
 }
 
 export interface HistoryQuotesSchema {
-    data?: HistoryTableData[]
+    data?: HistoryQuotesData[]
     isLoading: boolean
     error?: string
 }

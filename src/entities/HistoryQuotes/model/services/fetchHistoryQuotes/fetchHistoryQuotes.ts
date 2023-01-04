@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { currencyApi } from 'shared/api'
-import { HistoryTableData } from 'entities/HistoryQuotes/model/types/history'
+import { HistoryQuotesData } from 'entities/HistoryQuotes/model/types/history'
 import cuid from 'cuid'
 
-export const fetchHistoryQuotes = createAsyncThunk<HistoryTableData[], void, { rejectValue: string}>(
+export const fetchHistoryQuotes = createAsyncThunk<HistoryQuotesData[], void, { rejectValue: string}>(
   'history/fetchHistoryQuotes',
   async (_, { dispatch, rejectWithValue }) => {
     try {
