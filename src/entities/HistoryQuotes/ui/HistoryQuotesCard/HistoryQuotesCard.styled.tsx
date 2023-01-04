@@ -23,6 +23,7 @@ export const TableHeadStyled = styled(TableHead)(({ theme }) => ({
 
 export const TableCellStyled = styled(TableCell)({
   color: '#fff',
+  padding: '10px',
 })
 
 export const PaginationWrapper = styled(Box)({

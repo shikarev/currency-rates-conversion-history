@@ -1,22 +1,21 @@
 import React from 'react'
-import { TableCell } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { getHistoryQuotesItem } from 'entities/HistoryQuotes/model/selectors/getHistoryQuotesItem/getHistoryQuotesItem'
-import { TableRowStyled } from './HistoryQuotesRow.styled'
+import { TableCellStyled, TableRowStyled } from './HistoryQuotesRow.styled'
 
 const HistoryQuotesRow = ({ id }:{id: string}) => {
   const historyItem = useSelector(getHistoryQuotesItem(id))
 
   return (
     <TableRowStyled>
-      <TableCell component="th" scope="row">
+      <TableCellStyled component="th" scope="row">
         {historyItem?.asset}
-      </TableCell>
-      <TableCell align="left">{historyItem?.startDate}</TableCell>
-      <TableCell align="left">{historyItem?.startQuote}</TableCell>
-      <TableCell align="left">{historyItem?.finishDate}</TableCell>
-      <TableCell align="left">{historyItem?.finishQuote}</TableCell>
-      <TableCell align="left">{historyItem?.profit}</TableCell>
+      </TableCellStyled>
+      <TableCellStyled align="left">{historyItem?.startDate}</TableCellStyled>
+      <TableCellStyled align="left">{historyItem?.startQuote}</TableCellStyled>
+      <TableCellStyled align="left">{historyItem?.finishDate}</TableCellStyled>
+      <TableCellStyled align="left">{historyItem?.finishQuote}</TableCellStyled>
+      <TableCellStyled align="left">{historyItem?.profit}</TableCellStyled>
     </TableRowStyled>
   )
 }
