@@ -1,9 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit'
-import { getHistoryQuotes } from 'entities/HistoryQuotes/model/selectors/getHistoryQuotes'
+import { getHistoryQuotesData } from '../getHistoryQuotesData/getHistoryQuotesData'
 
 export const getHistoryListId = createSelector(
-  [getHistoryQuotes],
-  (historyQuotes) => historyQuotes?.data?.map(((item) => ({
+  [getHistoryQuotesData],
+  (historyQuotesData) => historyQuotesData?.map(((item) => ({
     id: item.id,
   }))),
 )
