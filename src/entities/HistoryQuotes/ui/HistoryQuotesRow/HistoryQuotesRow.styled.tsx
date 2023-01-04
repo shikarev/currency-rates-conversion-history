@@ -6,4 +6,5 @@ export const TableRowStyled = styled(TableRow)({
 
 export const TableCellStyled = styled(TableCell)({
   padding: '10px',
+  height: '58px',
 })
