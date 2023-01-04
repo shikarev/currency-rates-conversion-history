@@ -1,118 +1,91 @@
-import { TableDataGrid } from 'shared/ui/TableDataGrid/TableDataGrid'
-import React, { memo, useEffect } from 'react'
+import React, {
+  memo, useCallback, useEffect, useState,
+} from 'react'
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import { historyQuotesReducer } from 'entities/HistoryQuotes'
 import { useSelector } from 'react-redux'
-import { getHistoryQuotesData } from 'entities/HistoryQuotes/model/selectors/getHistoryQuotesData/getHistoryQuotesData'
-import { GridColDef } from '@mui/x-data-grid'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { fetchHistoryQuotes } from 'entities/HistoryQuotes/model/services/fetchHistoryQuotes/fetchHistoryQuotes'
-import {
-  HistoryQuotesCardStyled, TableCellStyled,
-  TableContainerStyled, TableHeadStyled,
-} from 'entities/HistoryQuotes/ui/HistoryQuotesCard/HistoryQuotesCard.styled'
 import { getHistoryListId } from 'entities/HistoryQuotes/model/selectors/getHistoryListId/getHistoryListId'
-import { getHistoryQuotesItem } from 'entities/HistoryQuotes/model/selectors/getHistoryQuotesItem/getHistoryQuotesItem'
+import { Table, TableBody, TableRow } from '@mui/material'
+import Arrow from 'shared/assets/icons/big-arrow.svg'
 import {
-  Pagination,
-  Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow,
-} from '@mui/material'
-import HistoryQuotesRow from 'entities/HistoryQuotes/ui/HistoryQuotesRow/HistoryQuotesRow'
+  HistoryQuotesCardStyled, IconButtonArrowLeftStyled,
+  IconButtonArrowRightStyled,
+  PageCountWrapperStyled,
+  PaginationWrapper,
+  TableCellStyled,
+  TableContainerStyled,
+  TableHeadStyled,
+} from './HistoryQuotesCard.styled'
+import { HistoryQuotesRow } from '../HistoryQuotesRow/HistoryQuotesRow'
 
 const reducers: ReducersList = {
   historyQuotes: historyQuotesReducer,
 }
 
 const HistoryQuotesCard: React.FC = memo(() => {
-  const columns: GridColDef[] = [
-    {
-      field: 'asset',
-      headerName: 'Актив',
-      minWidth: 85,
-      flex: 0.2,
-      sortable: false,
-    },
-    {
-      field: 'startDate',
-      headerName: 'Начало',
-      minWidth: 120,
-      flex: 0.3,
-      sortable: false,
-    },
-    {
-      field: 'startQuote',
-      headerName: 'Котировка',
-      minWidth: 110,
-      flex: 0.25,
-      sortable: false,
-    },
-    {
-      field: 'finishDate',
-      headerName: 'Конец',
-      minWidth: 120,
-      flex: 0.3,
-      sortable: false,
-    },
-    {
-      field: 'finishQuote',
-      headerName: 'Котировка',
-      flex: 0.25,
-      minWidth: 110,
-      sortable: false,
-    },
-    {
-      field: 'profit',
-      headerName: 'Прибыль',
-      flex: 0.2,
-      minWidth: 85,
-      sortable: false,
-    },
-  ]
-
   const dispatch = useAppDispatch()
-  const data = useSelector(getHistoryQuotesData)
-  const idList = useSelector(getHistoryListId)
+  const listId = useSelector(getHistoryListId) ?? []
 
-  const [page, setPage] = React.useState(0)
   const rowsPerPage = 10
+  const totalPages = listId.length / rowsPerPage
 
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value)
-  }
+  const [page, setPage] = useState<number>(0)
 
-  const rows = data
+  const handlePrevPage = useCallback(() => {
+    setPage(page - 1)
+  }, [page])
+
+  const handleNextPage = useCallback(() => {
+    setPage(page + 1)
+  }, [page])
 
   useEffect(() => {
-    if (!data) {
-      dispatch(fetchHistoryQuotes())
-      console.log('history')
-    }
-  }, [dispatch, data])
+    dispatch(fetchHistoryQuotes())
+    console.log('history')
+  }, [dispatch])
 
   return (
     <DynamicModuleLoader reducers={reducers}>
       <HistoryQuotesCardStyled>
         <TableContainerStyled>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table sx={{ minWidth: 650 }}>
             <TableHeadStyled>
               <TableRow>
-                <TableCellStyled>Актив</TableCellStyled>
-                <TableCellStyled align="right">Начало</TableCellStyled>
-                <TableCellStyled align="right">Котировка</TableCellStyled>
-                <TableCellStyled align="right">Конец</TableCellStyled>
-                <TableCellStyled align="right">Котировка</TableCellStyled>
-                <TableCellStyled align="right">Прибыль</TableCellStyled>
+                <TableCellStyled align="left" width="85px">Актив</TableCellStyled>
+                <TableCellStyled align="left" width="120px">Начало</TableCellStyled>
+                <TableCellStyled align="left" width="110px">Котировка</TableCellStyled>
+                <TableCellStyled align="left" width="120px">Конец</TableCellStyled>
+                <TableCellStyled align="left" width="110px">Котировка</TableCellStyled>
+                <TableCellStyled align="left" width="85px">Прибыль</TableCellStyled>
               </TableRow>
             </TableHeadStyled>
-            <TableBody>
-              {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+            <TableBody sx={{ height: '460px' }}>
+              {listId?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                 <HistoryQuotesRow key={row.id} id={row.id} />
               ))}
             </TableBody>
-            <TableFooter>
-              <Pagination count={10} page={page} onChange={handleChange} />
-            </TableFooter>
           </Table>
+          <PaginationWrapper>
+            <IconButtonArrowLeftStyled
+              disableRipple
+              onClick={handlePrevPage}
+              disabled={page === 0}
+            >
+              <Arrow />
+            </IconButtonArrowLeftStyled>
+            <PageCountWrapperStyled>
+              {`${page + 1} / ${totalPages}`}
+            </PageCountWrapperStyled>
+            <IconButtonArrowRightStyled
+              disableRipple
+              onClick={handleNextPage}
+              disabled={page === totalPages - 1}
+            >
+              <Arrow />
+            </IconButtonArrowRightStyled>
+          </PaginationWrapper>
         </TableContainerStyled>
       </HistoryQuotesCardStyled>
 
