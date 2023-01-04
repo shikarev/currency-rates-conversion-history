@@ -26,10 +26,10 @@ const reducers: ReducersList = {
 
 const HistoryQuotesCard: React.FC = memo(() => {
   const dispatch = useAppDispatch()
-  const listId = useSelector(getHistoryListId) ?? []
+  const listId = useSelector(getHistoryListId)
 
   const rowsPerPage = 10
-  const totalPages = listId.length / rowsPerPage
+  const totalPages = listId && (listId.length / rowsPerPage)
 
   const [page, setPage] = useState<number>(0)
 
@@ -67,25 +67,28 @@ const HistoryQuotesCard: React.FC = memo(() => {
               ))}
             </TableBody>
           </Table>
-          <PaginationWrapper>
-            <IconButtonArrowLeftStyled
-              disableRipple
-              onClick={handlePrevPage}
-              disabled={page === 0}
-            >
-              <Arrow />
-            </IconButtonArrowLeftStyled>
-            <PageCountWrapperStyled>
-              {`${page + 1} / ${totalPages}`}
-            </PageCountWrapperStyled>
-            <IconButtonArrowRightStyled
-              disableRipple
-              onClick={handleNextPage}
-              disabled={page === totalPages - 1}
-            >
-              <Arrow />
-            </IconButtonArrowRightStyled>
-          </PaginationWrapper>
+          {!totalPages ? null
+            : (
+              <PaginationWrapper>
+                <IconButtonArrowLeftStyled
+                  disableRipple
+                  onClick={handlePrevPage}
+                  disabled={page === 0}
+                >
+                  <Arrow />
+                </IconButtonArrowLeftStyled>
+                <PageCountWrapperStyled>
+                  {`${page + 1} / ${totalPages}`}
+                </PageCountWrapperStyled>
+                <IconButtonArrowRightStyled
+                  disableRipple
+                  onClick={handleNextPage}
+                  disabled={page === totalPages - 1}
+                >
+                  <Arrow />
+                </IconButtonArrowRightStyled>
+              </PaginationWrapper>
+            )}
         </TableContainerStyled>
       </HistoryQuotesCardStyled>
 
