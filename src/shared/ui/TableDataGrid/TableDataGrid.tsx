@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import {
   GridColDef,
   gridPageCountSelector,
@@ -23,15 +23,23 @@ interface TableDataGridProps {
 }
 
 export function CustomPagination() {
-  const apiRef = useGridApiContext()
-  const page = useGridSelector(apiRef, gridPageSelector)
-  const pageCount = useGridSelector(apiRef, gridPageCountSelector)
+  const gridApiContextRef = useGridApiContext()
+  const page = useGridSelector(gridApiContextRef, gridPageSelector)
+  const pageCount = useGridSelector(gridApiContextRef, gridPageCountSelector)
+
+  const handlePrevPage = useCallback(() => {
+    gridApiContextRef.current.setPage(page - 1)
+  }, [gridApiContextRef, page])
+
+  const handleNextPage = useCallback(() => {
+    gridApiContextRef.current.setPage(page + 1)
+  }, [gridApiContextRef, page])
 
   return (
     <PaginationWrapper>
       <ArrowLeftStyled
         component="span"
-        onClick={() => apiRef.current.setPage(page - 1)}
+        onClick={handlePrevPage}
       >
         <Arrow />
       </ArrowLeftStyled>
@@ -40,7 +48,7 @@ export function CustomPagination() {
       </PageCountWrapperStyled>
       <ArrowRightStyled
         component="span"
-        onClick={() => apiRef.current.setPage(page + 1)}
+        onClick={handleNextPage}
       >
         <Arrow />
       </ArrowRightStyled>
