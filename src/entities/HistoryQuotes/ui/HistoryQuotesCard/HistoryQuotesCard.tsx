@@ -9,6 +9,9 @@ import { fetchHistoryQuotes } from 'entities/HistoryQuotes/model/services/fetchH
 import { getHistoryListId } from 'entities/HistoryQuotes/model/selectors/getHistoryListId/getHistoryListId'
 import Arrow from 'shared/assets/icons/big-arrow.svg'
 import {
+  getHistoryQuotesPageData,
+} from 'entities/HistoryQuotes/model/selectors/getHistoryQuotesPageData/getHistoryQuotesPageData'
+import {
   HistoryQuotesCardStyled,
   IconButtonArrowLeftStyled,
   IconButtonArrowRightStyled,
@@ -29,12 +32,13 @@ const reducers: ReducersList = {
 
 const HistoryQuotesCard: React.FC = memo(() => {
   const dispatch = useAppDispatch()
-  const listId = useSelector(getHistoryListId)
-
-  const rowsPerPage = 10
-  const totalPages = listId && (listId.length / rowsPerPage)
-
   const [page, setPage] = useState<number>(0)
+  const rowsPerPage = 10
+
+  const listId = useSelector(getHistoryListId)
+  const currentPageData = useSelector(getHistoryQuotesPageData({ page, rowsPerPage }))
+
+  const totalPages = listId && (listId.length / rowsPerPage)
 
   const handlePrevPage = useCallback(() => {
     setPage(page - 1)
@@ -65,7 +69,7 @@ const HistoryQuotesCard: React.FC = memo(() => {
               </TableRowStyled>
             </TableHeadStyled>
             <TableBodyStyled>
-              {listId?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+              {currentPageData?.map((row) => (
                 <HistoryQuotesRow key={row.id} id={row.id} />
               ))}
             </TableBodyStyled>
