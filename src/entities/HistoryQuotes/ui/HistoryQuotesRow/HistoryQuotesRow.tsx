@@ -8,7 +8,7 @@ interface HistoryQuotesRowProps {
 }
 
 const HistoryQuotesRow: React.FC<HistoryQuotesRowProps> = ({ id }) => {
-  const historyItem = useSelector(getHistoryQuotesItem(id))
+  const historyItem = useSelector((state) => getHistoryQuotesItem(state, id))
 
   return (
     <TableRowStyled>

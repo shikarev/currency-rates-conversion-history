@@ -62,7 +62,9 @@ const HistoryQuotesCard: React.FC = memo(() => {
   const rowsPerPage = 10
 
   const listId = useSelector(getHistoryListId)
-  const currentPageData = useSelector(getHistoryQuotesPageData({ page, rowsPerPage }))
+  const currentPageData = useSelector((state) => (
+    getHistoryQuotesPageData(state, page, rowsPerPage)
+  ))
 
   useEffect(() => {
     dispatch(fetchHistoryQuotes())
