@@ -3,6 +3,7 @@ import { fetchHistoryQuotes } from 'entities/HistoryQuotes/model/services/fetchH
 import { HistoryQuotesData, HistoryQuotesSchema } from '../types/history'
 
 const initialState: HistoryQuotesSchema = {
+  data: undefined,
   isLoading: false,
   error: undefined,
 }

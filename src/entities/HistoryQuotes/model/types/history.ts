@@ -20,7 +20,7 @@ export interface HistoryQuotes {
 }
 
 export interface HistoryQuotesSchema {
-    data?: HistoryQuotesData[]
+    data: undefined | HistoryQuotesData[]
     isLoading: boolean
     error?: string
 }
