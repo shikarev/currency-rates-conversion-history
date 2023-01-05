@@ -5,12 +5,8 @@ import { find } from 'lodash'
 
 export const getHistoryQuotesItem = ({ id }: HistoryId) => createSelector(
   [getHistoryQuotesData],
-  (historyQuotesData: HistoryQuotesData[] | undefined) => {
-    const historyTableItem = find(historyQuotesData, (historyItem) => historyItem.id === id)
-    if (historyTableItem) {
-      return historyTableItem
-    }
-
-    return undefined
-  },
+  (historyQuotesData: HistoryQuotesData[] | undefined) => find(
+    historyQuotesData,
+    (historyItem) => historyItem.id === id,
+  ),
 )
