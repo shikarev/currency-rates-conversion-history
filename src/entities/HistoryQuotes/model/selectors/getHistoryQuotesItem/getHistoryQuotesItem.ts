@@ -3,7 +3,7 @@ import { getHistoryQuotesData } from 'entities/HistoryQuotes/model/selectors/get
 import { HistoryId, HistoryQuotesData } from 'entities/HistoryQuotes/model/types/history'
 import { find } from 'lodash'
 
-export const getHistoryQuotesItem = ({ id }: HistoryId) => createSelector(
+export const getHistoryQuotesItem = (id: HistoryId) => createSelector(
   [getHistoryQuotesData],
   (historyQuotesData: HistoryQuotesData[] | undefined) => find(
     historyQuotesData,

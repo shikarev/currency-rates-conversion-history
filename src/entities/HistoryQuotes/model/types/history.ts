@@ -1,6 +1,4 @@
-export interface HistoryId {
-    id: string
-}
+export type HistoryId = string
 
 export interface HistoryDealsData {
     asset: string
@@ -11,7 +9,9 @@ export interface HistoryDealsData {
     startQuote: string
 }
 
-export interface HistoryQuotesData extends HistoryDealsData, HistoryId {}
+export interface HistoryQuotesData extends HistoryDealsData {
+    id: string
+}
 
 export interface HistoryQuotes {
     deals: HistoryDealsData[]
