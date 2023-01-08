@@ -81,7 +81,7 @@ const HistoryQuotesCard: React.FC = memo(() => {
         rowsPerPage={rowsPerPage}
       >
         {currentPageData?.map((row) => (
-          <HistoryQuotesRow key={row.id} id={row.id} />
+          <HistoryQuotesRow key={row} id={row} />
         ))}
       </CustomTable>
     </DynamicModuleLoader>

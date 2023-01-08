@@ -24,7 +24,3 @@ export interface HistoryQuotesSchema {
     isLoading: boolean
     error?: string
 }
-
-export interface HistoryListId {
-    id: string
-}
