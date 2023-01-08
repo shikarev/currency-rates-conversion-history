@@ -1,13 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { getHistoryQuotesItem } from 'entities/HistoryQuotes/model/selectors/getHistoryQuotesItem/getHistoryQuotesItem'
-import { TableCellStyled, TableRowStyled } from './HistoryQuotesRow.styled'
+import { TableCellStyled, TableRowStyled } from 'shared/ui/CustomTable/CustomTable.styled'
+import { CustomTableRowProps } from 'shared/ui/CustomTable/types/types'
 
-interface HistoryQuotesRowProps {
-    id: string
-}
-
-const HistoryQuotesRow: React.FC<HistoryQuotesRowProps> = ({ id }) => {
+const HistoryQuotesRow: React.FC<CustomTableRowProps> = ({ id }) => {
   const historyItem = useSelector((state) => getHistoryQuotesItem(state, id))
 
   return (

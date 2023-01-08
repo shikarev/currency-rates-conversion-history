@@ -27,11 +27,11 @@ export const TableBodyStyled = styled(TableBody)({
   overflowY: 'scroll',
 })
 
-export const TableRowStyled = styled(TableRow)({
+export const HeaderTableRowStyled = styled(TableRow)({
   display: 'flex',
 })
 
-export const TableCellStyled = styled(TableCell)({
+export const HeaderTableCellStyled = styled(TableCell)({
   color: '#fff',
   padding: '10px',
   display: 'flex',
@@ -62,4 +62,17 @@ export const PageCountWrapperStyled = styled(Box)({
   userSelect: 'none',
   width: '50px',
   textAlign: 'center',
+})
+
+export const TableRowStyled = styled(TableRow)({
+  display: 'flex',
+  '&:last-child td, &:last-child th': { border: 0 },
+})
+
+export const TableCellStyled = styled(TableCell)({
+  padding: '10px',
+  height: '58px',
+  display: 'flex',
+  flex: 1,
+  alignItems: 'center',
 })

@@ -4,7 +4,8 @@ export interface ColumnProps {
     field: string,
     headerName: string,
     align?: 'inherit' | 'left' | 'center' | 'right' | 'justify',
-    width: string,
+    width?: string,
+    maxWidth?: string,
 }
 
 export interface CustomTableProps {
@@ -15,4 +16,8 @@ export interface CustomTableProps {
     dataLength: number | undefined
     children: ReactNode
     hideFooterPagination?: boolean
+}
+
+export interface CustomTableRowProps {
+    id: string
 }

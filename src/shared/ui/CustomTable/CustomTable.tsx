@@ -2,15 +2,15 @@ import React, { useCallback } from 'react'
 import Arrow from 'shared/assets/icons/big-arrow.svg'
 import { ColumnProps, CustomTableProps } from 'shared/ui/CustomTable/types/types'
 import {
+  HeaderTableCellStyled,
+  HeaderTableRowStyled,
   IconButtonArrowLeftStyled,
   IconButtonArrowRightStyled,
   PageCountWrapperStyled,
   PaginationWrapper,
   TableBodyStyled,
-  TableCellStyled,
   TableContainerStyled,
   TableHeadStyled,
-  TableRowStyled,
   TableStyled,
 } from './CustomTable.styled'
 
@@ -36,17 +36,18 @@ const CustomTable: React.FC<CustomTableProps> = ({
     <TableContainerStyled>
       <TableStyled>
         <TableHeadStyled>
-          <TableRowStyled>
+          <HeaderTableRowStyled>
             {columns.map((item:ColumnProps) => (
-              <TableCellStyled
+              <HeaderTableCellStyled
                 key={item.field}
                 align={item.align}
                 width={item.width}
+                sx={{ maxWidth: item.maxWidth }}
               >
                 {item.headerName}
-              </TableCellStyled>
+              </HeaderTableCellStyled>
             ))}
-          </TableRowStyled>
+          </HeaderTableRowStyled>
         </TableHeadStyled>
         <TableBodyStyled>
           {children}
@@ -56,23 +57,28 @@ const CustomTable: React.FC<CustomTableProps> = ({
       {!totalPages ? null
         : (
           <PaginationWrapper>
-            <IconButtonArrowLeftStyled
-              disableRipple
-              onClick={handlePrevPage}
-              disabled={page === 0}
-            >
-              <Arrow />
-            </IconButtonArrowLeftStyled>
-            <PageCountWrapperStyled>
-              {`${page + 1} / ${totalPages}`}
-            </PageCountWrapperStyled>
-            <IconButtonArrowRightStyled
-              disableRipple
-              onClick={handleNextPage}
-              disabled={page === totalPages - 1}
-            >
-              <Arrow />
-            </IconButtonArrowRightStyled>
+            {totalPages <= 1 ? null
+              : (
+                <>
+                  <IconButtonArrowLeftStyled
+                    disableRipple
+                    onClick={handlePrevPage}
+                    disabled={page === 0}
+                  >
+                    <Arrow />
+                  </IconButtonArrowLeftStyled>
+                  <PageCountWrapperStyled>
+                    {`${page + 1} / ${totalPages}`}
+                  </PageCountWrapperStyled>
+                  <IconButtonArrowRightStyled
+                    disableRipple
+                    onClick={handleNextPage}
+                    disabled={page === totalPages - 1}
+                  >
+                    <Arrow />
+                  </IconButtonArrowRightStyled>
+                </>
+              )}
           </PaginationWrapper>
         )}
     </TableContainerStyled>

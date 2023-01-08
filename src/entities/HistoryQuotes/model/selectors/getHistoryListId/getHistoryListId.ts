@@ -3,7 +3,7 @@ import { getHistoryQuotesData } from '../getHistoryQuotesData/getHistoryQuotesDa
 
 export const getHistoryListId = createSelector(
   [getHistoryQuotesData],
-  (historyQuotesData) => historyQuotesData?.map(((item) => ({
+  (historyQuotesData) => historyQuotesData?.map((item) => ({
     id: item.id,
-  }))),
+  })),
 )
