@@ -1,17 +1,16 @@
-import { memo, useEffect } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { classNames } from 'shared/lib/classNames/classNames'
-import { Box, IconButton } from '@mui/material'
+import { Box } from '@mui/material'
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
-import { exchangeRateActions, exchangeRateReducer } from 'entities/ExchangeRate'
+import { exchangeRateReducer } from 'entities/ExchangeRate'
 import { getExchangeRateData } from 'entities/ExchangeRate/model/selectors/getExchangeRateData/getExchangeRateData'
 import { useSelector } from 'react-redux'
-import { TableDataGrid } from 'shared/ui/TableDataGrid/TableDataGrid'
-import { GridColDef } from '@mui/x-data-grid'
-import StarOutlined from 'shared/assets/icons/star-outlined.svg'
-import StarFilled from 'shared/assets/icons/star-filled.svg'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { fetchCurrencyPairs } from 'entities/ExchangeRate/model/services/fetchCurrencyPairs/fetchCurrencyPairs'
+import { ColumnProps } from 'shared/ui/CustomTable/types/types'
+import { CustomTable } from 'shared/ui/CustomTable/CustomTable'
+import { fetchExchangeRateItems } from 'entities/ExchangeRate/model/services/fetchCurrencyPairs/fetchCurrencyPairs'
 import cls from './ExchangeRateCard.module.scss'
+import { ExchangeRateRow } from '../ExchangeRateRow/ExchangeRateRow'
 
 const reducers: ReducersList = {
   exchangeRate: exchangeRateReducer,
@@ -24,68 +23,59 @@ interface ExchangeRateCardProps {
 const ExchangeRateCard = memo((props: ExchangeRateCardProps) => {
   const dispatch = useAppDispatch()
 
+  const [page, setPage] = useState<number>(0)
+  const rowsPerPage = 10
+
   const data = useSelector(getExchangeRateData)
 
-  const removeFavorite = (id: string) => {
-    dispatch(exchangeRateActions.removeFromFavorites(id))
-  }
-
-  const addFavorite = (id: string) => {
-    dispatch(exchangeRateActions.addToFavorites(id))
-  }
-
-  const columns: GridColDef[] = [
+  const columns: ColumnProps[] = [
     {
       field: 'action',
       headerName: '',
-      flex: 0.15,
-      sortable: false,
-      renderCell: (params) => (
-        <IconButton
-          onClick={() => (
-            params.row.favorite
-              ? removeFavorite(params.row.id)
-              : addFavorite(params.row.id)
-          )}
-        >
-          {params.row.favorite ? <StarFilled /> : <StarOutlined />}
-        </IconButton>
-      ),
+      align: 'left',
+      maxWidth: '85px',
     },
     {
       field: 'asset',
       headerName: 'Валютная пара',
-      minWidth: 120,
-      flex: 0.3,
-      sortable: false,
+      align: 'left',
+      width: '120px',
     },
     {
       field: 'quote',
       headerName: 'Котировка',
-      flex: 0.3,
-      minWidth: 120,
-      sortable: false,
+      align: 'left',
+      width: '110px',
     },
     {
       field: 'startDate',
       headerName: 'Дата получения',
-      minWidth: 120,
-      flex: 0.3,
-      sortable: false,
+      align: 'left',
+      width: '120px',
     },
   ]
 
   const { className } = props
 
   useEffect(() => {
-    dispatch(fetchCurrencyPairs())
+    dispatch(fetchExchangeRateItems())
     console.log('exchange')
   }, [dispatch])
 
   return (
     <DynamicModuleLoader reducers={reducers}>
       <Box className={classNames(cls.ExchangeRateCard, {}, [className])}>
-        <TableDataGrid data={data || []} columns={columns} hideFooterPagination />
+        <CustomTable
+          columns={columns}
+          dataLength={data?.length}
+          page={page}
+          setPage={setPage}
+          rowsPerPage={rowsPerPage}
+        >
+          {data?.map((row) => (
+            <ExchangeRateRow key={row.id} id={row.id} />
+          ))}
+        </CustomTable>
       </Box>
     </DynamicModuleLoader>
   )

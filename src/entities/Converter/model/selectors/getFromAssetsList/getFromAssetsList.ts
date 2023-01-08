@@ -1,7 +1,10 @@
 import { createSelector } from '@reduxjs/toolkit'
 import { getConverter } from 'entities/Converter/model/selectors/getConverter'
+import { StateSchema } from 'app/providers/StoreProvider'
 
-export const getFromAssetsList = createSelector(
+type GetFromAssetsList = (state: StateSchema) => string[]
+
+export const getFromAssetsList: GetFromAssetsList = createSelector(
   [getConverter],
   (converter) => converter.fromAssetsList,
 )

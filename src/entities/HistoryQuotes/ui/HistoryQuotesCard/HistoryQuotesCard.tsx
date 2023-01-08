@@ -1,86 +1,90 @@
-import { classNames } from 'shared/lib/classNames/classNames'
-import { TableDataGrid } from 'shared/ui/TableDataGrid/TableDataGrid'
-import { memo, useEffect } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import { historyQuotesReducer } from 'entities/HistoryQuotes'
 import { useSelector } from 'react-redux'
-import { getHistoryQuotesData } from 'entities/HistoryQuotes/model/selectors/getHistoryQuotesData/getHistoryQuotesData'
-import { GridColDef } from '@mui/x-data-grid'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { fetchHistoryQuotes } from 'entities/HistoryQuotes/model/services/fetchHistoryQuotes/fetchHistoryQuotes'
-import cls from './HistoryQuotesCard.module.scss'
+import { getHistoryListId } from 'entities/HistoryQuotes/model/selectors/getHistoryListId/getHistoryListId'
+import { ColumnProps } from 'shared/ui/CustomTable/types/types'
+import { CustomTable } from 'shared/ui/CustomTable/CustomTable'
+import {
+  getHistoryQuotesPageData,
+} from 'entities/HistoryQuotes/model/selectors/getHistoryQuotesPageData/getHistoryQuotesPageData'
+import { StateSchema } from 'app/providers/StoreProvider'
+import { HistoryQuotesRow } from '../HistoryQuotesRow/HistoryQuotesRow'
 
 const reducers: ReducersList = {
   historyQuotes: historyQuotesReducer,
 }
 
-interface HistoryCardProps {
-  className?: string
-}
-
-const HistoryQuotesCard = memo((props: HistoryCardProps) => {
-  const { className } = props
-
-  const columns: GridColDef[] = [
+const HistoryQuotesCard: React.FC = memo(() => {
+  const columns: ColumnProps[] = [
     {
       field: 'asset',
       headerName: 'Актив',
-      minWidth: 85,
-      flex: 0.2,
-      sortable: false,
+      align: 'left',
+      width: '85px',
     },
     {
       field: 'startDate',
       headerName: 'Начало',
-      minWidth: 120,
-      flex: 0.3,
-      sortable: false,
+      align: 'left',
+      width: '120px',
     },
     {
       field: 'startQuote',
       headerName: 'Котировка',
-      minWidth: 110,
-      flex: 0.25,
-      sortable: false,
+      align: 'left',
+      width: '110px',
     },
     {
       field: 'finishDate',
       headerName: 'Конец',
-      minWidth: 120,
-      flex: 0.3,
-      sortable: false,
+      align: 'left',
+      width: '120px',
     },
     {
       field: 'finishQuote',
       headerName: 'Котировка',
-      flex: 0.25,
-      minWidth: 110,
-      sortable: false,
+      align: 'left',
+      width: '110px',
     },
     {
       field: 'profit',
       headerName: 'Прибыль',
-      flex: 0.2,
-      minWidth: 85,
-      sortable: false,
+      align: 'left',
+      width: '85px',
     },
   ]
 
   const dispatch = useAppDispatch()
 
-  const data = useSelector(getHistoryQuotesData)
+  const [page, setPage] = useState<number>(0)
+  const rowsPerPage = 10
+
+  const listId = useSelector(getHistoryListId)
+  const currentPageData = useSelector((state: StateSchema) => (
+    getHistoryQuotesPageData(state, page, rowsPerPage)
+  ))
 
   useEffect(() => {
-    if (!data) {
-      dispatch(fetchHistoryQuotes())
-    }
-  }, [dispatch, data])
+    dispatch(fetchHistoryQuotes())
+    console.log('history')
+  }, [dispatch])
 
   return (
     <DynamicModuleLoader reducers={reducers}>
-      <div className={classNames(cls.HistoryCard, {}, [className])}>
-        <TableDataGrid data={data || []} columns={columns} />
-      </div>
+      <CustomTable
+        columns={columns}
+        dataLength={listId?.length}
+        page={page}
+        setPage={setPage}
+        rowsPerPage={rowsPerPage}
+      >
+        {currentPageData?.map((row) => (
+          <HistoryQuotesRow key={row} id={row} />
+        ))}
+      </CustomTable>
     </DynamicModuleLoader>
   )
 })

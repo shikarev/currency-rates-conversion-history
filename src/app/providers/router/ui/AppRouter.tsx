@@ -10,19 +10,22 @@ const AppRouter = () => {
 
   return (
     <Suspense fallback={<PageLoader />}>
-      <Routes>
-        {authData ? (
-          <>
+
+      {authData ? (
+        <div className="content-page">
+          <Routes>
             <Route path={routes[APP_ROUTES.MAIN].path} element={routes.main.element} />
             <Route path="*" element={<Navigate to={routes[APP_ROUTES.MAIN].path} replace />} />
-          </>
-        ) : (
-          <>
+          </Routes>
+        </div>
+      ) : (
+        <div className="auth-page">
+          <Routes>
             <Route path={routes[APP_ROUTES.LOGIN].path} element={routes.login.element} />
             <Route path="*" element={<Navigate to={routes[APP_ROUTES.LOGIN].path} replace />} />
-          </>
-        )}
-      </Routes>
+          </Routes>
+        </div>
+      )}
     </Suspense>
   )
 }

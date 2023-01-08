@@ -9,7 +9,7 @@ export interface ExchangeRate {
     result: string,
 }
 
-export interface CurrencyPair extends ExchangeRateAssets {
+export interface ExchangeRateItem extends ExchangeRateAssets {
     id: string
     favorite: boolean
 }
@@ -17,5 +17,5 @@ export interface CurrencyPair extends ExchangeRateAssets {
 export interface ExchangeRateSchema {
     isLoading: boolean
     error?: string
-    table: CurrencyPair[]
+    table: ExchangeRateItem[]
 }

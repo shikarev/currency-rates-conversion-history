@@ -1,19 +1,20 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { HistoryQuotes } from 'entities/HistoryQuotes'
+import { currencyApi } from 'shared/api'
+import { HistoryQuotesData } from 'entities/HistoryQuotes/model/types/history'
 
-export const fetchHistoryQuotes = createAsyncThunk<HistoryQuotes, void, { rejectValue: string}>(
-  'history/fetchHistory',
-  async (_, thunkAPI) => {
+export const fetchHistoryQuotes = createAsyncThunk<HistoryQuotesData[], void, { rejectValue: string}>(
+  'history/fetchHistoryQuotes',
+  async (_, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.post<HistoryQuotes>('https://test-front-spa.mmtestprojectsfactory.com/api/', {
-        action: 'history',
-      })
+      const data = await dispatch(currencyApi.endpoints.history.initiate()).unwrap()
+      const historyQuotesData = data.deals.map((item) => (
+        { ...item, id: item.asset + item.startDate + item.finishDate }
+      ))
 
-      return response.data
-    } catch (e) {
-      console.log(e)
-      return thunkAPI.rejectWithValue('error')
+      return historyQuotesData
+    } catch (error) {
+      console.log(error)
+      return rejectWithValue('error')
     }
   },
 )

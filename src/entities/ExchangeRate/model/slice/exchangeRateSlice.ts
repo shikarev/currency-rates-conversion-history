@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { fetchCurrencyPairs } from '../services/fetchCurrencyPairs/fetchCurrencyPairs'
-import { CurrencyPair, ExchangeRateSchema } from '../types/exchangeRate'
+import { fetchExchangeRateItems } from 'entities/ExchangeRate/model/services/fetchCurrencyPairs/fetchCurrencyPairs'
+import { ExchangeRateItem, ExchangeRateSchema } from '../types/exchangeRate'
 
 const initialState: ExchangeRateSchema = {
   isLoading: false,
@@ -31,15 +31,15 @@ export const exchangeRateSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCurrencyPairs.pending, (state) => {
+      .addCase(fetchExchangeRateItems.pending, (state) => {
         state.error = undefined
         state.isLoading = true
       })
-      .addCase(fetchCurrencyPairs.fulfilled, (state, action: PayloadAction<CurrencyPair[]>) => {
+      .addCase(fetchExchangeRateItems.fulfilled, (state, action: PayloadAction<ExchangeRateItem[]>) => {
         state.isLoading = false
         state.table = action.payload
       })
-      .addCase(fetchCurrencyPairs.rejected, (state, action) => {
+      .addCase(fetchExchangeRateItems.rejected, (state, action) => {
         state.isLoading = false
         state.error = action.payload
       })
