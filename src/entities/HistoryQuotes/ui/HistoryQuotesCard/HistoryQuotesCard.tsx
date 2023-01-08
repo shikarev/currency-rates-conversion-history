@@ -10,6 +10,7 @@ import { CustomTable } from 'shared/ui/CustomTable/CustomTable'
 import {
   getHistoryQuotesPageData,
 } from 'entities/HistoryQuotes/model/selectors/getHistoryQuotesPageData/getHistoryQuotesPageData'
+import { StateSchema } from 'app/providers/StoreProvider'
 import { HistoryQuotesRow } from '../HistoryQuotesRow/HistoryQuotesRow'
 
 const reducers: ReducersList = {
@@ -62,7 +63,7 @@ const HistoryQuotesCard: React.FC = memo(() => {
   const rowsPerPage = 10
 
   const listId = useSelector(getHistoryListId)
-  const currentPageData = useSelector((state) => (
+  const currentPageData = useSelector((state: StateSchema) => (
     getHistoryQuotesPageData(state, page, rowsPerPage)
   ))
 

@@ -1,10 +1,13 @@
 import { createSelector } from '@reduxjs/toolkit'
-import { HistoryId } from 'entities/HistoryQuotes/model/types/history'
 import { find } from 'lodash'
 import { getExchangeRateData } from 'entities/ExchangeRate/model/selectors/getExchangeRateData/getExchangeRateData'
+import { StateSchema } from 'app/providers/StoreProvider'
+import { ExchangeRateItem } from 'entities/ExchangeRate/model/types/exchangeRate'
 
-export const getExchangeRateItem = createSelector(
-  [getExchangeRateData, (_state, id: HistoryId) => id],
+type GetExchangeRateItem = (state: StateSchema, id: string) => ExchangeRateItem | undefined
+
+export const getExchangeRateItem: GetExchangeRateItem = createSelector(
+  [getExchangeRateData, (_state, id) => id],
   (historyQuotesData, id) => find(
     historyQuotesData,
     (historyItem) => historyItem.id === id,

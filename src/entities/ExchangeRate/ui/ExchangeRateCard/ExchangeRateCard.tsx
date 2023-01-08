@@ -6,9 +6,9 @@ import { exchangeRateReducer } from 'entities/ExchangeRate'
 import { getExchangeRateData } from 'entities/ExchangeRate/model/selectors/getExchangeRateData/getExchangeRateData'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { fetchCurrencyPairs } from 'entities/ExchangeRate/model/services/fetchCurrencyPairs/fetchCurrencyPairs'
 import { ColumnProps } from 'shared/ui/CustomTable/types/types'
 import { CustomTable } from 'shared/ui/CustomTable/CustomTable'
+import { fetchExchangeRateItems } from 'entities/ExchangeRate/model/services/fetchCurrencyPairs/fetchCurrencyPairs'
 import cls from './ExchangeRateCard.module.scss'
 import { ExchangeRateRow } from '../ExchangeRateRow/ExchangeRateRow'
 
@@ -58,7 +58,7 @@ const ExchangeRateCard = memo((props: ExchangeRateCardProps) => {
   const { className } = props
 
   useEffect(() => {
-    dispatch(fetchCurrencyPairs())
+    dispatch(fetchExchangeRateItems())
     console.log('exchange')
   }, [dispatch])
 

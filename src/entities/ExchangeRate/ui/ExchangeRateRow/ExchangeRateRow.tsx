@@ -8,11 +8,12 @@ import { IconButton } from '@mui/material'
 import { exchangeRateActions } from 'entities/ExchangeRate'
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { getExchangeRateItem } from 'entities/ExchangeRate/model/selectors/getExchangeRateItem/getExchangeRateItem'
+import { StateSchema } from 'app/providers/StoreProvider'
 
 const ExchangeRateRow: React.FC<CustomTableRowProps> = ({ id }) => {
   const dispatch = useAppDispatch()
 
-  const exchangeItem = useSelector((state) => getExchangeRateItem(state, id))
+  const exchangeItem = useSelector((state: StateSchema) => getExchangeRateItem(state, id))
 
   const handleFavorites = useCallback((favorite: boolean | undefined, id: string | undefined) => {
     if (favorite && id) {

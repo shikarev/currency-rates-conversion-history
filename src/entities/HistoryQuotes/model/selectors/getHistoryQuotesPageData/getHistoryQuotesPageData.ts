@@ -1,7 +1,11 @@
 import { createSelector } from '@reduxjs/toolkit'
 import { getHistoryListId } from 'entities/HistoryQuotes/model/selectors/getHistoryListId/getHistoryListId'
+import { StateSchema } from 'app/providers/StoreProvider'
+import { HistoryId } from '../../types/history'
 
-export const getHistoryQuotesPageData = createSelector(
+type GetHistoryQuotesPageData = (state: StateSchema, page: number, rowsPerPage: number) => HistoryId[] | undefined
+
+export const getHistoryQuotesPageData: GetHistoryQuotesPageData = createSelector(
   [
     getHistoryListId,
     (_state, page) => page,

@@ -1,3 +1,6 @@
 import { StateSchema } from 'app/providers/StoreProvider'
+import { ExchangeRateItem } from 'entities/ExchangeRate/model/types/exchangeRate'
 
-export const getExchangeRateData = (state: StateSchema) => state.exchangeRate?.table
+type GetExchangeRateData = (state: StateSchema) => ExchangeRateItem[] | undefined
+
+export const getExchangeRateData: GetExchangeRateData = (state) => state.exchangeRate?.table
